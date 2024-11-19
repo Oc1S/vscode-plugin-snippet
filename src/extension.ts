@@ -1,6 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import path from 'node:path'
+
 import * as vscode from 'vscode'
+
+import { getWebviewContent } from './view'
 
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -19,15 +23,28 @@ export function activate(context: vscode.ExtensionContext) {
       // The code you place here will be executed every time your command is executed
 
       const panel = vscode.window.createWebviewPanel(
-        'catCoding',
-        'Cat Coding',
+        'snippet-manager.dashboard',
+        'Snippet Manager',
         vscode.ViewColumn.One,
         {
           retainContextWhenHidden: true, // 保证 Webview 所在页面进入后台时不被释放
-          enableScripts: true, // 运行 JS 执行
+          enableScripts: true,
         }
       )
-      panel.webview.html = getWebviewContent()
+
+      const isProduction =
+        context.extensionMode === vscode.ExtensionMode.Production
+      let srcUrl = ''
+      if (isProduction) {
+        const filePath = vscode.Uri.file(
+          path.join(context.extensionPath, 'dist', 'static/js/main.js')
+        )
+        srcUrl = panel.webview.asWebviewUri(filePath).toString()
+      } else {
+        srcUrl = 'http://localhost:5173/src/main.tsx'
+      }
+
+      panel.webview.html = getWebviewContent(srcUrl)
     }
   )
 
@@ -36,17 +53,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
-function getWebviewContent() {
-  return `<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cat Coding</title>
-      </head>
-      <body>
-        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
-      </body>
-    </html>`
-}
