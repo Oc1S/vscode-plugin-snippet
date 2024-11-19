@@ -7,17 +7,6 @@
 - pnpm/eslint/prettier/ling-staged/simple-git-hooks/stale-dep
 - use esbuild to bundle extension
 
-## Setup
-
-After fork this repository and clone it to local, run:
-
-```bash
-cd <your-extension-directory>
-npx setup-boilerplate
-```
-
-You can also just skip this step and adjust the boilerplate by yourself.
-
 ## Development
 
 Install dependencies by:
