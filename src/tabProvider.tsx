@@ -7,35 +7,34 @@ import {
   window,
 } from 'vscode'
 
-import { getNonce } from '../utilities/getNonce'
-import { getUri } from '../utilities/getUri'
+import { getNonce, getUri } from './utils'
 
 // https://juejin.cn/post/7330886455231627315?from=search-suggest#heading-1
-export class HelloWorldPanelProvider {
-  public static currentPanel: HelloWorldPanelProvider | undefined
-  private readonly _panel: WebviewPanel
-  private _disposables: Disposable[] = []
+export class PanelProvider {
+  public static currentPanel: PanelProvider | undefined
+  private readonly panel: WebviewPanel
+  private disposables: Disposable[] = []
 
   private constructor(panel: WebviewPanel, extensionUri: Uri) {
-    this._panel = panel
+    this.panel = panel
 
     // 面板关闭时触发的函数
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
+    this.panel.onDidDispose(() => this.dispose(), null, this.disposables)
 
     // 面板要渲染的HTML内容
-    this._panel.webview.html = this._getWebviewContent(
-      this._panel.webview,
+    this.panel.webview.html = this.getWebviewContent(
+      this.panel.webview,
       extensionUri
     )
 
     // 监听函数
-    this._setWebviewMessageListener(this._panel.webview)
+    this.setWebviewMessageListener(this.panel.webview)
   }
 
   // 渲染当前的Webview面板，如果当前面板不存在，那么重新创建一个Webview Panel
   public static render(extensionUri: Uri) {
-    if (HelloWorldPanel.currentPanel) {
-      HelloWorldPanel.currentPanel._panel.reveal(ViewColumn.One)
+    if (PanelProvider.currentPanel) {
+      PanelProvider.currentPanel.panel.reveal(ViewColumn.One)
     } else {
       const panel = window.createWebviewPanel(
         'showHelloWorld', // panel类型
@@ -47,18 +46,16 @@ export class HelloWorldPanelProvider {
         }
       )
 
-      HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri)
+      PanelProvider.currentPanel = new PanelProvider(panel, extensionUri)
     }
   }
 
   // 视图关闭
   public dispose() {
-    HelloWorldPanel.currentPanel = undefined
-
-    this._panel.dispose()
-
-    while (this._disposables.length) {
-      const disposable = this._disposables.pop()
+    PanelProvider.currentPanel = undefined
+    this.panel.dispose()
+    while (this.disposables.length) {
+      const disposable = this.disposables.pop()
       if (disposable) {
         disposable.dispose()
       }
@@ -66,31 +63,32 @@ export class HelloWorldPanelProvider {
   }
 
   // webview内容
-  private _getWebviewContent(webview: Webview, extensionUri: Uri) {
+  private getWebviewContent(webview: Webview, extensionUri: Uri) {
     const webviewUri = getUri(webview, extensionUri, ['out', 'webview.js']) // 这里是通过一个函数来加载编译后的js文件，可以作为module导入
 
-    const nonce = getNonce() // 一个工具函数，保证js脚本引用的唯一性和安全性
-
-    return /*html*/ `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-					<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${nonce}';">
-          <title>Hello World!</title>
-        </head>
-        <body>
-          <h1>Hello World!</h1>
-					<vscode-button id="howdy">Howdy!</vscode-button>
-					<script type="module" nonce="${nonce}" src="${webviewUri}"></script>
-        </body>
-      </html>
+    const nonce = getNonce()
+    return `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${nonce}';">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <vscode-button id="howdy">Howdy!</vscode-button>
+    <div id="root"></div>
+    <script type="module" nonce="${nonce}" src="${webviewUri}"></script>
+  </body>
+</html>
     `
   }
 
-  // webview的监听函数，用来坚挺从webview发送过来的data
-  private _setWebviewMessageListener(webview: Webview) {
+  // webview的监听函数，用来监听从webview发送过来的data
+  private setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
       (message: any) => {
         const command = message.command
@@ -102,7 +100,7 @@ export class HelloWorldPanelProvider {
         }
       },
       undefined,
-      this._disposables
+      this.disposables
     )
   }
 }
