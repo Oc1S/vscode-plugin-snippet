@@ -37,12 +37,12 @@ export class PanelProvider {
       PanelProvider.currentPanel.panel.reveal(ViewColumn.One)
     } else {
       const panel = window.createWebviewPanel(
-        'showHelloWorld', // panel类型
+        'showHelloWorld', // panel id
         'Hello World', // panel title
         ViewColumn.One,
         {
-          enableScripts: true, // 是否在面板内执行js
-          localResourceRoots: [Uri.joinPath(extensionUri, 'out')], // panel视图加载out路径下的资源文件（可以是打包后的js和css文件，具体在_getWebviewContent函数内）
+          enableScripts: true,
+          localResourceRoots: [Uri.joinPath(extensionUri, 'out')], // panel视图加载out路径下的资源文件（可以是打包后的js和css文件，具体在getWebviewContent函数内）
         }
       )
 

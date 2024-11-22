@@ -49,7 +49,7 @@
     "commands": [
       {
         "command": "snippet-manager.dashboard",
-        "title": "snippet"
+        "title": "Snippet Dashboard"
       }
     ]
   },

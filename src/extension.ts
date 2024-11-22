@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
       let srcUrl = ''
       if (isProduction) {
         const filePath = vscode.Uri.file(
-          path.join(context.extensionPath, 'dist', 'static/js/main.js')
+          path.join(context.extensionPath, 'out', 'dist', 'static/js/main.js')
         )
         srcUrl = panel.webview.asWebviewUri(filePath).toString()
       } else {
