@@ -1,12 +1,6 @@
-import './App.css'
+import { Button } from '@nextui-org/react'
 
-import { useState } from 'react'
-
-import viteLogo from '/vite.svg'
-
-import { ReactIcon } from './components/icons/react'
-
-function App() {
+const demo = `function App() {
   const [count, setCount] = useState(0)
 
   return (
@@ -24,9 +18,19 @@ function App() {
         <button onClick={() => setCount(count => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <Button>1</Button>
+      </div>
+    </>
+  )
+}
+`
+
+function App() {
+  return (
+    <>
+      <div>
+        <Button>1</Button>
+        {demo}
       </div>
     </>
   )

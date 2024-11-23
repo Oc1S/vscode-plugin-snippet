@@ -8,7 +8,6 @@ export function watchReloadPlugin(): PluginOption {
   let ws: WebSocket | null = null
 
   const onBuild = () => {
-    console.log('send@@')
     ws?.send(MessageInterpreter.send({ type: 'build_complete' }))
   }
 
