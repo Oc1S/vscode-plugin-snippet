@@ -6,6 +6,15 @@ import MessageInterpreter from './interpreter'
 
 const clientsThatNeedToUpdate: Set<WebSocket> = new Set()
 
+function ping() {
+  clientsThatNeedToUpdate.forEach(ws =>
+    ws.send(MessageInterpreter.send({ type: 'ping' }))
+  )
+  setTimeout(() => {
+    ping()
+  }, 15_000)
+}
+
 function initReloadServer() {
   try {
     const wss = new WebSocketServer({ port: LOCAL_RELOAD_SOCKET_PORT })
@@ -42,19 +51,10 @@ function initReloadServer() {
     })
   } catch (e) {
     console.error(
-      `[HMR] Failed to conenct to dev-server at ${LOCAL_RELOAD_SOCKET_URL}\n`,
+      `[HMR] 🚧Failed to conenct to dev-server at ${LOCAL_RELOAD_SOCKET_URL}\n`,
       e
     )
   }
 }
 
 initReloadServer()
-
-function ping() {
-  clientsThatNeedToUpdate.forEach(ws =>
-    ws.send(MessageInterpreter.send({ type: 'ping' }))
-  )
-  setTimeout(() => {
-    ping()
-  }, 15_000)
-}

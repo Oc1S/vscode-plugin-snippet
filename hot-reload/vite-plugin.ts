@@ -8,6 +8,7 @@ export function watchReloadPlugin(): PluginOption {
   let ws: WebSocket | null = null
 
   const onBuild = () => {
+    console.log('send@@')
     ws?.send(MessageInterpreter.send({ type: 'build_complete' }))
   }
 
@@ -18,15 +19,15 @@ export function watchReloadPlugin(): PluginOption {
       ws.onopen = () => {
         onOpen?.()
         console.log(
-          `[HMR] Connected to dev-server at ${LOCAL_RELOAD_SOCKET_URL}`
+          `[HMR] ✅Connected to dev-server at ${LOCAL_RELOAD_SOCKET_URL}`
         )
       }
       ws.onerror = event => {
         console.error(
-          `[HMR] Failed to connect to server at ${LOCAL_RELOAD_SOCKET_URL}`,
-          event
+          `[HMR] 🚧Failed to connect to server at ${LOCAL_RELOAD_SOCKET_URL}`,
+          event,
+          '\nRetrying in 10 seconds...'
         )
-        console.warn('Retrying in 10 seconds...')
         ws = null
         setTimeout(() => initializeWebSocket({ onOpen }), 10_000)
       }

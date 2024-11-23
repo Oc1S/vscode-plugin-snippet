@@ -11,7 +11,10 @@ import {
   WebviewPanel,
   window,
 } from 'vscode'
+import WebSocket from 'ws'
 
+import { LOCAL_RELOAD_SOCKET_URL } from '../hot-reload/constants'
+import MessageInterpreter from '../hot-reload/interpreter'
 import { ContextHelper } from './utils/context-helper'
 
 export class PanelProvider {
@@ -19,6 +22,7 @@ export class PanelProvider {
   private readonly context: ExtensionContext
   private readonly panel: WebviewPanel
   private disposables: Disposable[] = []
+  private ws: WebSocket | null = null
 
   private constructor(context: ExtensionContext, panel: WebviewPanel) {
     this.context = context
@@ -39,13 +43,8 @@ export class PanelProvider {
       const updateWebview = () => {
         this.panel.webview.html = this.getWebviewContent()
       }
-      updateWebview()
-      const interval = setInterval(updateWebview, 2000)
-      this.disposables.push({
-        dispose: () => {
-          clearInterval(interval)
-        },
-      })
+      this.listenToHotReload(updateWebview)
+      // const interval = setInterval(updateWebview, 2000)
     }
   }
 
@@ -123,5 +122,25 @@ export class PanelProvider {
 
   public postMessage(text: string) {
     this.panel.webview.postMessage({ text })
+  }
+
+  private listenToHotReload(onReload: () => void) {
+    if (this.ws) {
+      return
+    }
+    const ws = new WebSocket(LOCAL_RELOAD_SOCKET_URL)
+    ws.onmessage = event => {
+      const message = MessageInterpreter.receive(event.data.toString())
+      if (message.type === 'do_update') {
+        console.log('[HMR] 🤗Hot reload triggered...')
+        onReload()
+      }
+    }
+    this.ws = ws
+    this.disposables.push({
+      dispose() {
+        ws.close()
+      },
+    })
   }
 }

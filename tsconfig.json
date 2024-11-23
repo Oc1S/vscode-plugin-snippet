@@ -29,5 +29,5 @@
 
     "outDir": "./out/src"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "hot-reload/**/*.ts"]
 }
