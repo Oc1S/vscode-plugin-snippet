@@ -70,7 +70,7 @@ export class PanelProvider {
     }
   }
 
-  // clear up
+  // clean up
   public dispose() {
     PanelProvider.current = undefined
     this.panel.dispose()
