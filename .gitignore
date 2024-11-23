@@ -5,6 +5,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.turbo
 
 # esbuild-visualizer
 meta.json

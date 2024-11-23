@@ -11,7 +11,7 @@ function initReloadServer() {
     const wss = new WebSocketServer({ port: LOCAL_RELOAD_SOCKET_PORT })
 
     wss.on('listening', () =>
-      console.log(`[HMR] Server listening at ${LOCAL_RELOAD_SOCKET_URL}`)
+      console.log(`[HMR] ✅Server listening at ${LOCAL_RELOAD_SOCKET_URL}`)
     )
 
     wss.on('connection', client => {
