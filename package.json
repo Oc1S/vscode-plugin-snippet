@@ -63,6 +63,7 @@
     "pre-commit": "npx lint-staged"
   },
   "scripts": {
+    "dev": "pnpm esbuild:watch & turbo dev --filter=view",
     "vscode:prepublish": "pnpm esbuild:base --minify",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "stale-dep -u",
@@ -103,6 +104,7 @@
     "simple-git-hooks": "^2.11.1",
     "stale-dep": "^0.7.0",
     "tsx": "^4.19.0",
+    "turbo": "^2.3.1",
     "typescript": "~5.5.4"
   },
   "dependencies": {
