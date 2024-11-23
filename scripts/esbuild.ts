@@ -14,10 +14,7 @@ const options: BuildOptions = {
   bundle: true,
   metafile: process.argv.includes('--metafile'),
   outdir: './out/src',
-  external: [
-    'vscode',
-    'typescript', // vue-component-meta
-  ],
+  external: ['vscode', 'typescript'],
   format: 'cjs',
   platform: 'node',
   target: 'ESNext',
