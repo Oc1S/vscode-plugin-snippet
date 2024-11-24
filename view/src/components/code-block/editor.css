@@ -1,0 +1,11 @@
+.cm-editor {
+  font-size: 16px;
+}
+
+.cm-editor .cm-scroller {
+  font-family: MonoLisa, menlo;
+}
+
+.cm-content {
+  font-family: MonoLisa, menlo;
+}
