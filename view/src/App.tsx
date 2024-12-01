@@ -1,58 +1,116 @@
-import { useState } from 'react'
-import { Button, ButtonGroup } from '@nextui-org/react'
-import { useLocalStorage } from 'usehooks-ts'
+import { Reorder } from 'framer-motion'
 
-import { repoStore } from '@/store'
+import { CodeBlock } from '@/components/code-block'
+import { useDisableSave } from '@/hooks'
+import { actions, store, useStore } from '@/store'
+import { cx } from '@/utils'
 
-import { CodeBlock } from './components/code-block'
-import { code } from './demo'
-import { useDisableSave } from './hooks'
+const Tabs = () => {
+  const fileIndex = useStore.fileIndex()
+  const currentSet = useStore.currentSet()
+
+  const { files } = currentSet
+  return (
+    <Reorder.Group
+      key={currentSet.id}
+      className="flex w-full overflow-hidden"
+      axis="x"
+      values={files}
+      onReorder={newFiles => {
+        const currentFileId = store.currentFile().id
+        const newFileIndex = newFiles.findIndex(f => f.id === currentFileId)
+        actions.state(draft => {
+          draft.codeSets[draft.codeSetIndex].files = newFiles
+          draft.fileIndex = newFileIndex
+        })
+      }}
+    >
+      {files.map((f, index) => (
+        <Reorder.Item key={f.name} value={f}>
+          <div
+            key={f.id}
+            className={cx(
+              'flex min-w-8 cursor-pointer items-center justify-center rounded-t-md border-b border-transparent p-2 text-sm transition hover:bg-black/30',
+              fileIndex === index && 'border-[#6cc7f6]'
+            )}
+            onClick={() => {
+              actions.fileIndex(index)
+            }}
+          >
+            {f.name}
+          </div>
+        </Reorder.Item>
+      ))}
+    </Reorder.Group>
+  )
+}
+
+const SideBar = () => {
+  const codeSets = useStore.codeSets()
+  const codeSetIndex = useStore.codeSetIndex()
+  return (
+    <div className="flex w-[200px] flex-col items-center justify-center gap-2">
+      <div className="text-lg">CodeSets</div>
+      <Reorder.Group
+        className="flex flex-col"
+        axis="y"
+        values={codeSets}
+        onReorder={newSets => {
+          const currentSetId = store.currentSet().id
+          const newSetIndex = newSets.findIndex(s => s.id === currentSetId)
+          actions.state(draft => {
+            draft.codeSets = newSets
+            draft.codeSetIndex = newSetIndex
+          })
+        }}
+      >
+        {codeSets.map((s, index) => {
+          return (
+            <Reorder.Item
+              key={s.id}
+              value={s}
+              onClick={() => actions.changeCodeSet(index)}
+            >
+              <div
+                className={cx(
+                  'flex cursor-pointer transition hover:opacity-70',
+                  index === codeSetIndex && 'text-primary translate-x-2'
+                )}
+              >
+                {s.name}
+              </div>
+            </Reorder.Item>
+          )
+        })}
+      </Reorder.Group>
+    </div>
+  )
+}
 
 function App() {
-  const codeSets = repoStore.get.codeSets()
-  const [value, setValue] = useLocalStorage<typeof codeSets>('code', codeSets)
-
-  const [currentSetIndex, setCurrentSetIndex] = useState(0)
-  const currentSet = value[currentSetIndex]
+  const codeSetIndex = useStore.codeSetIndex()
+  const fileIndex = useStore.fileIndex()
+  const currentSet = useStore.currentSet()
 
   useDisableSave()
 
-  const Tabs = () => {
-    return (
-      <div className="flex">
-        {currentSet.content.map(c => {
-          return (
-            <div
-              key={c.name}
-              className="border-primary flex min-w-8 cursor-pointer items-center justify-center rounded-t-md border-b bg-black p-2 hover:opacity-80"
-            >
-              {c.name}
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
-
   return (
     <div className="flex w-full">
-      <ButtonGroup className="mr-4 flex flex-col" radius="none">
-        {value.map((data, index) => {
-          return (
-            <Button
-              key={index}
-              color={index === currentSetIndex ? 'primary' : 'default'}
-              onClick={() => [setCurrentSetIndex(index)]}
-            >
-              {data.name}
-            </Button>
-          )
-        })}
-      </ButtonGroup>
-
-      <div className="flex flex-col">
-        <Tabs />
-        <CodeBlock initValue={code} />
+      {/* left */}
+      <SideBar />
+      {/* right */}
+      <div className="flex items-center">
+        <div className="flex flex-col">
+          <Tabs />
+          <CodeBlock
+            value={currentSet.files[fileIndex].code}
+            onChange={newVal => {
+              actions.state(draft => {
+                draft.codeSets[codeSetIndex].files[fileIndex].code = newVal
+              })
+            }}
+          />
+        </div>
       </div>
     </div>
   )

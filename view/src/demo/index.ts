@@ -1,4 +1,4 @@
-export const code = `function App() {
+export const demoCode = `function App() {
   const [count, setCount] = useState(0)
   return (
     <>

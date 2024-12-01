@@ -1,0 +1,31 @@
+/* 整个滚动条 */
+::-webkit-scrollbar {
+  width: 12px; /* 滚动条的宽度 */
+  height: 12px; /* 滚动条的高度（横向滚动条） */
+}
+
+/* 滚动条的轨道 */
+::-webkit-scrollbar-track {
+  /* 轨道背景色 */
+  background: transparent;
+  border-radius: 10px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  /* 滑块颜色 */
+  background: #888;
+  border-radius: 10px;
+}
+
+/* 滑块在鼠标悬停时 */
+::-webkit-scrollbar-thumb:hover {
+  /* 悬停时滑块颜色 */
+  background: #555;
+}
+
+/* 滚动条的角 */
+::-webkit-scrollbar-corner {
+  /* 两个滚动条交汇处 */
+  background: transparent;
+}
