@@ -18,7 +18,7 @@ export default {
           colors: {
             primary: {
               foreground: '#FFFFFF',
-              DEFAULT: '#abc',
+              DEFAULT: '#1dddae',
             },
           },
         },
