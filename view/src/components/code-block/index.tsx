@@ -33,6 +33,7 @@ export const CodeBlock: FC<{
         width="800px"
         basicSetup={{
           foldGutter: false,
+          lineNumbers: false,
         }}
         extensions={[javascript({ jsx: true, typescript: true })]}
         onChange={onChange}

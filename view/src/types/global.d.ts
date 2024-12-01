@@ -1,2 +1,3 @@
 type AnyFunction = (...args: any[]) => any
-type VoidFunction = () => void
+
+type Fn = () => void

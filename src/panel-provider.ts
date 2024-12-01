@@ -24,6 +24,8 @@ export class PanelProvider {
   private disposables: Disposable[] = []
   private ws: WebSocket | null = null
 
+  static WEBVIEW_INJECT_PUBLIC_PATH = '__inject_path'
+
   private constructor(context: ExtensionContext, panel: WebviewPanel) {
     this.context = context
     this.panel = panel
@@ -100,6 +102,11 @@ export class PanelProvider {
     )
     jsElement.attr('src', jsFilePath)
     cssElement.attr('href', cssFilePath)
+
+    jsElement.before(
+      `<script> window.${PanelProvider.WEBVIEW_INJECT_PUBLIC_PATH} = "${this.toWebviewUri(distPath)}"</script>`
+    )
+
     return $.html()
   }
 
