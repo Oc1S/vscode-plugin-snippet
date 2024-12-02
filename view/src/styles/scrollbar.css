@@ -1,7 +1,8 @@
 /* 整个滚动条 */
 ::-webkit-scrollbar {
-  width: 12px; /* 滚动条的宽度 */
-  height: 12px; /* 滚动条的高度（横向滚动条） */
+  --scroll-width: 6px;
+  width: var(--scroll-width);
+  height: var(--scroll-width);
 }
 
 /* 滚动条的轨道 */
@@ -28,4 +29,26 @@
 ::-webkit-scrollbar-corner {
   /* 两个滚动条交汇处 */
   background: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.mask-right {
+  mask: linear-gradient(-90deg, transparent 0, #000 30px);
+}
+
+.mask-left {
+  mask: linear-gradient(90deg, transparent 0, #000 30px);
+}
+
+.mask-both {
+  mask: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 30px,
+    #000 calc(100% - 30px),
+    transparent 100%
+  );
 }

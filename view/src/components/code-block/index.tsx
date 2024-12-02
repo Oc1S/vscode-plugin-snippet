@@ -21,7 +21,7 @@ export const CodeBlock: FC<{
     <div className="group relative">
       <Copy
         className={
-          'absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 data-[copying=true]:opacity-100'
+          'absolute right-4 top-2 z-10 opacity-0 group-hover:opacity-100 data-[copying=true]:opacity-100'
         }
         content={value}
       />
