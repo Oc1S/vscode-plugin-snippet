@@ -13,12 +13,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --primary: #1dddae;
+  --secondary: #6cc7f6;
 }
 
 body {
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   margin: 0;
   width: 100vw;
   min-height: 100vh;

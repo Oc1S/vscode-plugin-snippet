@@ -65,6 +65,7 @@ const SideBar = () => {
         }}
       >
         {codeSets.map((s, index) => {
+          const isCurrent = codeSetIndex === index
           return (
             <Reorder.Item
               key={s.id}
@@ -73,8 +74,8 @@ const SideBar = () => {
             >
               <div
                 className={cx(
-                  'flex cursor-pointer transition hover:opacity-70',
-                  index === codeSetIndex && 'text-primary translate-x-2'
+                  'my-0.5 flex cursor-pointer items-center justify-center rounded-md p-4 py-1 text-[#eee] transition hover:bg-white/10 hover:opacity-90',
+                  isCurrent && 'bg-white/10'
                 )}
               >
                 {s.name}
