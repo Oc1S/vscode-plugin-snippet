@@ -34,21 +34,3 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
-.mask-right {
-  mask: linear-gradient(-90deg, transparent 0, #000 30px);
-}
-
-.mask-left {
-  mask: linear-gradient(90deg, transparent 0, #000 30px);
-}
-
-.mask-both {
-  mask: linear-gradient(
-    90deg,
-    transparent 0,
-    #000 30px,
-    #000 calc(100% - 30px),
-    transparent 100%
-  );
-}

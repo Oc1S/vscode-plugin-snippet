@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",
+    "@lezer/highlight": "^1.2.1",
     "@nextui-org/react": "^2.4.8",
+    "@uiw/codemirror-theme-vscode": "^4.23.6",
+    "@uiw/codemirror-themes": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",

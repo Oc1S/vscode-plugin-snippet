@@ -1,6 +1,8 @@
 import { nanoid } from 'nanoid'
 import { createStore } from 'zustand-x'
 
+import { isBrowser } from '@/constants'
+
 import { demoCode } from '../demo'
 
 export const codeStore = createStore('code')(
@@ -21,7 +23,7 @@ export const codeStore = createStore('code')(
   },
   {
     persist: {
-      enabled: false,
+      enabled: isBrowser,
     },
   }
 )
@@ -38,6 +40,16 @@ export const codeStore = createStore('code')(
       set.state(draft => {
         draft.codeSetIndex = index
         draft.fileIndex = 0
+      })
+    },
+    addFile() {
+      set.state(draft => {
+        draft.codeSets[draft.codeSetIndex].files.push({
+          id: `file-${Date.now()}`,
+          name: 'new-file.tsx',
+          code: '',
+        })
+        draft.fileIndex = draft.codeSets[draft.codeSetIndex].files.length - 1
       })
     },
   }))

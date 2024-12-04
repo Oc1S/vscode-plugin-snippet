@@ -15,6 +15,7 @@
   -moz-osx-font-smoothing: grayscale;
   --primary: #1dddae;
   --secondary: #6cc7f6;
+  --mask-width: 60px;
 }
 
 body {
@@ -28,6 +29,24 @@ body {
 code,
 pre {
   font-family: MonoLisa, Menlo, 'Source Code Pro', monospace;
+}
+
+.mask-right {
+  mask: linear-gradient(-90deg, transparent 0, #000 var(--mask-width));
+}
+
+.mask-left {
+  mask: linear-gradient(90deg, transparent 0, #000 var(--mask-width));
+}
+
+.mask-both {
+  mask: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--mask-width),
+    #000 calc(100% - var(--mask-width)),
+    transparent 100%
+  );
 }
 
 @font-face {

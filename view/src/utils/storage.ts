@@ -1,5 +1,3 @@
-export const isBrowser = true
-
 export const storage = {
   get(key: string) {
     const val = localStorage.getItem(key)

@@ -103,6 +103,7 @@ export class PanelProvider {
     jsElement.attr('src', jsFilePath)
     cssElement.attr('href', cssFilePath)
 
+    jsElement.before(`<script> window.isVSCodeWebview = true </script>`)
     jsElement.before(
       `<script> window.${PanelProvider.WEBVIEW_INJECT_PUBLIC_PATH} = "${this.toWebviewUri(distPath)}"</script>`
     )
