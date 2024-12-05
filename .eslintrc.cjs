@@ -23,6 +23,7 @@ module.exports = {
     'react/self-closing-comp': 'warn',
     'no-redeclare': 'warn',
     'no-debugger': 'warn',
+    '@typescript-eslint/no-unused-expressions': 'off',
     'prefer-const': 'off',
     'simple-import-sort/imports': [
       'warn',

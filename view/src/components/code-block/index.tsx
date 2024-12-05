@@ -32,7 +32,7 @@ export const CodeBlock: FC<{
         value={value}
         theme={theme}
         className="w-full"
-        height="600px"
+        height="500px"
         width="800px"
         placeholder="// Paste your code here..."
         basicSetup={{

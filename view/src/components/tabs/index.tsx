@@ -23,7 +23,6 @@ export const Tabs = () => {
     const handler = (event: WheelEvent) => {
       const { deltaX, deltaY } = event
       event.preventDefault()
-
       const dis = 30
       if (deltaX > 0 || deltaY > 0) {
         el.scrollLeft += dis
@@ -37,6 +36,13 @@ export const Tabs = () => {
       el.removeEventListener('wheel', handler)
     }
   }, [])
+
+  useEffect(() => {
+    document.querySelector(`[data-tab-index="${fileIndex}"]`)?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+    })
+  }, [fileIndex])
 
   const maskClassName = () => {
     if (!(isFirstInView || isLastInView)) {
@@ -76,22 +82,30 @@ export const Tabs = () => {
           }}
         >
           {files.map((f, index) => (
-            <Reorder.Item key={f.name} value={f}>
+            <Reorder.Item key={f.id} value={f}>
               <div
                 key={f.id}
+                data-tab-index={index}
                 className={cx(
                   'flex min-w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-t-md border-b border-transparent p-2 text-sm transition hover:bg-black/30',
                   fileIndex === index && 'border-[#6cc7f6]'
                 )}
-                onMouseDown={e => {
-                  actions.fileIndex(index)
-                  e.currentTarget.scrollIntoView({
-                    behavior: 'smooth',
-                    inline: 'center',
-                  })
-                }}
               >
-                {f.name}
+                <div
+                  onMouseDown={() => {
+                    actions.fileIndex(index)
+                  }}
+                >
+                  {f.name}
+                </div>
+                <div
+                  className="ml-2 rotate-45 cursor-pointer rounded-full p-1 transition duration-150 hover:rotate-[225deg] hover:bg-black"
+                  onClick={() => {
+                    actions.removeFileById(f.id)
+                  }}
+                >
+                  <PlusIcon color="#fff" className="h-4 w-4" />
+                </div>
               </div>
             </Reorder.Item>
           ))}
