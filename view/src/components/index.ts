@@ -1,3 +1,4 @@
-export * from './code-block'
-export * from './copy'
-export * from './tabs'
+export * from './code-block';
+export * from './copy';
+export * from './noise';
+export * from './tabs';

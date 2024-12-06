@@ -1,24 +1,24 @@
-import './editor.css'
+import './editor.css';
 
-import { FC } from 'react'
-import { javascript } from '@codemirror/lang-javascript'
-import { vscodeDarkInit } from '@uiw/codemirror-theme-vscode'
-import CodeMirror, { ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { FC } from 'react';
+import { javascript } from '@codemirror/lang-javascript';
+import { vscodeDarkInit } from '@uiw/codemirror-theme-vscode';
+import CodeMirror, { ReactCodeMirrorProps } from '@uiw/react-codemirror';
 
-import { usePersistenceFn } from '@/hooks'
+import { usePersistenceFn } from '@/hooks';
 
-import { Copy } from '../copy'
+import { Copy } from '../copy';
 
-const theme = vscodeDarkInit()
+const theme = vscodeDarkInit();
 
 export const CodeBlock: FC<{
-  lang?: 'javascript' | 'typescript' | 'jsx' | 'tsx'
-  value: string
-  onChange?: (value: string) => void
+  lang?: 'javascript' | 'typescript' | 'jsx' | 'tsx';
+  value: string;
+  onChange?: (value: string) => void;
 }> = ({ value, onChange: onChangeFromProps }) => {
   const onChange = usePersistenceFn((val => {
-    onChangeFromProps?.(val)
-  }) satisfies ReactCodeMirrorProps['onChange'])
+    onChangeFromProps?.(val);
+  }) satisfies ReactCodeMirrorProps['onChange']);
 
   return (
     <div className="group relative">
@@ -43,5 +43,5 @@ export const CodeBlock: FC<{
         onChange={onChange}
       />
     </div>
-  )
-}
+  );
+};

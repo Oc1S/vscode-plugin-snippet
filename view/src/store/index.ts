@@ -62,12 +62,14 @@ export const codeStore = createStore('code')(
     removeFileById(id: string) {
       set.state(draft => {
         const currentSet = draft.codeSets[draft.codeSetIndex];
-        const isCurrentFile =
+        const isClickCurrentFile =
           draft.fileIndex === currentSet.files.findIndex(f => f.id === id);
         currentSet.files = currentSet.files.filter(f => f.id !== id);
-
-        if (isCurrentFile) {
-          draft.fileIndex--;
+        if (isClickCurrentFile) {
+          const leftCount = currentSet.files.length;
+          if (leftCount <= draft.fileIndex) {
+            draft.fileIndex = leftCount - 1;
+          }
         } else {
           const currentFileId = store.currentFileId();
           const newIndex = currentSet.files.findIndex(
