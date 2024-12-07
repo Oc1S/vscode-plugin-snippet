@@ -5,10 +5,9 @@ import { isBrowser } from '@/constants';
 
 import { demoCode } from '../demo';
 
-export const codeStore = createStore('code')(
+const codeStore = createStore('code')(
   {
     codeSetIndex: 0,
-    // currentFileId:'',
     fileIndex: 0,
     codeSets: Array.from({ length: 10 }, (_, index) => {
       return {
@@ -30,10 +29,6 @@ export const codeStore = createStore('code')(
 )
   .extendSelectors((_, get) => ({
     currentSet: () => get.codeSets()[get.codeSetIndex()],
-    // fileIndex: () =>
-    //   get
-    //     .codeSets()
-    //     [get.codeSetIndex()].files.findIndex(f => f.id === get.currentFileId()),
     currentFileId: () =>
       get.codeSets()[get.codeSetIndex()].files[get.fileIndex()].id,
     currentFile: () =>
@@ -52,7 +47,7 @@ export const codeStore = createStore('code')(
     addFile() {
       set.state(draft => {
         draft.codeSets[draft.codeSetIndex].files.push({
-          id: `file-${Date.now()}`,
+          id: nanoid(),
           name: `new-file-${Date.now()}.tsx`,
           code: '',
         });

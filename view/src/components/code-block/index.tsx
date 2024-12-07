@@ -38,6 +38,7 @@ export const CodeBlock: FC<{
         basicSetup={{
           foldGutter: false,
           lineNumbers: false,
+          // highlightActiveLine: false,
         }}
         extensions={[javascript({ jsx: true, typescript: true })]}
         onChange={onChange}

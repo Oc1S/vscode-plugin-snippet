@@ -5,6 +5,7 @@ import { actions, store, useStore } from '@/store';
 import { cx } from '@/utils';
 
 import { PlusIcon } from '../icons';
+import { Close } from '../icons/close';
 
 export const Tabs = () => {
   const firstRef = useRef(null);
@@ -29,7 +30,6 @@ export const Tabs = () => {
       } else {
         el.scrollLeft -= dis;
       }
-      // el.scrollLeft += (event.deltaY + event.deltaX) / 4
     };
     el.addEventListener('wheel', handler);
     return () => {
@@ -89,7 +89,7 @@ export const Tabs = () => {
                 key={f.id}
                 data-tab-index={index}
                 className={cx(
-                  'flex min-w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-t-md border-b border-transparent p-2 py-1 text-sm transition hover:bg-black/30',
+                  'group flex min-w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-t-md border-b border-transparent p-2 py-1 text-sm transition hover:bg-black/30 active:bg-black/40',
                   fileIndex === index && 'border-[#6cc7f6]'
                 )}
                 onMouseDown={() => {
@@ -98,7 +98,7 @@ export const Tabs = () => {
               >
                 <div>{f.name}</div>
                 <div
-                  className="ml-2 rotate-45 cursor-pointer rounded-full p-1 transition duration-150 hover:rotate-[225deg] hover:bg-black"
+                  className="ml-2 cursor-pointer rounded-lg p-1 opacity-0 transition duration-150 hover:rotate-180 hover:bg-black/70 group-hover:opacity-100"
                   onMouseDown={e => {
                     e.stopPropagation();
                   }}
@@ -106,7 +106,7 @@ export const Tabs = () => {
                     actions.removeFileById(f.id);
                   }}
                 >
-                  <PlusIcon color="#fff" className="h-4 w-4" />
+                  <Close />
                 </div>
               </div>
             </Reorder.Item>
@@ -115,7 +115,7 @@ export const Tabs = () => {
         <div ref={lastRef} />
       </div>
       <div
-        className="mx-1 cursor-pointer rounded-lg p-1 transition duration-150 hover:rotate-180 hover:bg-black"
+        className="mx-1 cursor-pointer rounded-lg p-1 transition duration-150 hover:rotate-180 hover:bg-black/70"
         onClick={() => {
           actions.addFile();
         }}

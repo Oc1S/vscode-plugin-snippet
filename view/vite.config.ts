@@ -1,13 +1,14 @@
-import path from 'node:path'
+import path from 'node:path';
 
-import react from '@vitejs/plugin-react-swc'
-import { defineConfig } from 'vite'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite';
 
-import { watchReloadPlugin } from '../hot-reload/vite-plugin'
+import { watchReloadPlugin } from '../hot-reload/vite-plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), watchReloadPlugin()],
+  plugins: [react(), TanStackRouterVite(), watchReloadPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
@@ -16,4 +17,4 @@ export default defineConfig({
     outDir: '../out/view',
     emptyOutDir: true,
   },
-})
+});

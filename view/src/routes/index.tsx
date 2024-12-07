@@ -1,9 +1,14 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { Reorder } from 'framer-motion';
 
-import { CodeBlock, Noise, Tabs } from '@/components';
+import { CodeBlock, Tabs } from '@/components';
 import { useDisableSave } from '@/hooks';
 import { actions, store, useStore } from '@/store';
 import { cx } from '@/utils';
+
+export const Route = createFileRoute('/')({
+  component: Index,
+});
 
 const SideBar = () => {
   const codeSets = useStore.codeSets();
@@ -48,7 +53,7 @@ const SideBar = () => {
   );
 };
 
-function App() {
+function Index() {
   const codeSetIndex = useStore.codeSetIndex();
   const fileIndex = useStore.fileIndex();
   const currentSet = useStore.currentSet();
@@ -57,12 +62,11 @@ function App() {
 
   return (
     <>
-      <Noise />
-      <div className="flex w-full">
+      <div className="flex h-screen w-full items-center">
         {/* left */}
         <SideBar />
         {/* right */}
-        <div className="flex items-center">
+        <div className="flex flex-1 items-center justify-center">
           <div className="flex w-[800px] flex-col">
             <Tabs />
             <CodeBlock
@@ -79,5 +83,3 @@ function App() {
     </>
   );
 }
-
-export default App;
