@@ -1,25 +1,28 @@
 import { nanoid } from 'nanoid';
-import { createStore } from 'zustand-x';
+import { createStore, mapValuesKey } from 'zustand-x';
 
 import { isBrowser } from '@/constants';
 
 import { demoCode } from '../demo';
 
-const codeStore = createStore('code')(
+/* TODO:remove */
+const testCodeSet = Array.from({ length: 100 }, (_, index) => {
+  return {
+    id: nanoid(),
+    name: `test_set_${index}`,
+    files: Array.from({ length: 1 }, (_, idx) => ({
+      id: nanoid(),
+      name: `App_${idx}.tsx`,
+      code: demoCode,
+    })),
+  };
+});
+
+const snippetStore = createStore('code')(
   {
     codeSetIndex: 0,
     fileIndex: 0,
-    codeSets: Array.from({ length: 10 }, (_, index) => {
-      return {
-        id: nanoid(),
-        name: `test_set_${index}`,
-        files: Array.from({ length: 20 }, (_, idx) => ({
-          id: nanoid(),
-          name: `App_${idx}.tsx`,
-          code: demoCode,
-        })),
-      };
-    }),
+    codeSets: testCodeSet,
   },
   {
     persist: {
@@ -55,6 +58,9 @@ const codeStore = createStore('code')(
       });
     },
     removeFileById(id: string) {
+      if (get.currentSet().files.length <= 1) {
+        return;
+      }
       set.state(draft => {
         const currentSet = draft.codeSets[draft.codeSetIndex];
         const isClickCurrentFile =
@@ -66,7 +72,7 @@ const codeStore = createStore('code')(
             draft.fileIndex = leftCount - 1;
           }
         } else {
-          const currentFileId = store.currentFileId();
+          const currentFileId = get.currentFileId();
           const newIndex = currentSet.files.findIndex(
             f => f.id === currentFileId
           );
@@ -76,8 +82,17 @@ const codeStore = createStore('code')(
     },
   }));
 
-export const useStore = codeStore.use;
+const drawerStore = createStore('drawer')({
+  rename: false,
+});
+
+export const rootStore = {
+  snippet: snippetStore,
+  drawer: drawerStore,
+};
+
+export const useStore = () => mapValuesKey('use', rootStore);
 // Global getter selectors
-export const store = codeStore.get;
+export const store = mapValuesKey('get', rootStore);
 // Global actions
-export const actions = codeStore.set;
+export const actions = mapValuesKey('set', rootStore);

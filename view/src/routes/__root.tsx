@@ -10,8 +10,6 @@ const TanStackRouterDevtools =
         // Lazy load in development
         import('@tanstack/router-devtools').then(res => ({
           default: res.TanStackRouterDevtools,
-          // For Embedded Mode
-          // default: res.TanStackRouterDevtoolsPanel
         }))
       );
 
