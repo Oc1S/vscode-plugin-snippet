@@ -5,7 +5,13 @@ import { isBrowser } from '@/constants';
 
 import { demoCode } from '../demo';
 
-/* TODO:remove */
+const generateFile = () => ({
+  id: nanoid(),
+  name: `new-${Date.now()}.tsx`,
+  code: '',
+});
+
+/* TODO:for test */
 const testCodeSet = Array.from({ length: 100 }, (_, index) => {
   return {
     id: nanoid(),
@@ -49,11 +55,7 @@ const snippetStore = createStore('code')(
     },
     addFile() {
       set.state(draft => {
-        draft.codeSets[draft.codeSetIndex].files.push({
-          id: nanoid(),
-          name: `new-file-${Date.now()}.tsx`,
-          code: '',
-        });
+        draft.codeSets[draft.codeSetIndex].files.push(generateFile());
         draft.fileIndex = draft.codeSets[draft.codeSetIndex].files.length - 1;
       });
     },

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
-import { Noise } from '@/components';
+import { Drawer, Noise } from '@/components';
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'
@@ -18,6 +18,7 @@ export const Route = createRootRoute({
     <>
       <Outlet />
       <Noise />
+      <Drawer />
       <Suspense>
         <TanStackRouterDevtools />
       </Suspense>
