@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
+import { Input } from '@nextui-org/react';
 import { Reorder, useInView } from 'framer-motion';
 
 import { actions, store, useStore } from '@/store';
 import { cx } from '@/utils';
 
+import { drawer } from '../drawer';
 import { PlusIcon } from '../icons';
 import { CloseIcon } from '../icons/close';
 
@@ -18,6 +20,7 @@ export const FileTabs = () => {
   const { files } = currentSet;
 
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -99,7 +102,17 @@ export const FileTabs = () => {
                     actions.snippet.fileIndex(index);
                   }}
                   onDoubleClick={() => {
-                    actions.drawer.rename(true);
+                    drawer({
+                      header: 'Change Filename',
+                      body: (
+                        <Input
+                          label="Name"
+                          placeholder="New Name"
+                          variant="bordered"
+                        />
+                      ),
+                      onComfirm: () => {},
+                    });
                   }}
                 >
                   <div>{f.name}</div>

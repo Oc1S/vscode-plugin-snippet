@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { Input } from '@nextui-org/react';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { CodeBlock, FileTabs, Sidebar } from '@/components';
-import { Drawer, drawer } from '@/components/drawer';
+import { Drawer } from '@/components/drawer';
 import { useDisableSave } from '@/hooks';
 import { actions, useStore } from '@/store';
+
+const tags = ['1', '2', '3'];
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -18,14 +18,6 @@ function Index() {
 
   useDisableSave();
 
-  useEffect(() => {
-    drawer({
-      header: 'Change Filename',
-      body: <Input label="Name" placeholder="New Name" variant="bordered" />,
-      onComfirm: () => {},
-    });
-  }, []);
-
   return (
     <>
       <div className="flex h-screen w-full items-center">
@@ -33,7 +25,12 @@ function Index() {
         {/* left */}
         <Sidebar />
         {/* right */}
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <div className="flex gap-2">
+            {tags.map(tag => (
+              <div className="bg-green rounded p-1">{tag}</div>
+            ))}
+          </div>
           <div className="flex w-[800px] flex-col">
             <FileTabs />
             <CodeBlock
