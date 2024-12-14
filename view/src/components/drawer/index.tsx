@@ -1,28 +1,19 @@
 import { useState } from 'react';
-import {
-  Button,
-  Drawer as NextUIDrawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerProps as NextUIDrawerProps,
-} from '@nextui-org/react';
+import { Drawer as NextUIDrawer, DrawerContent } from '@nextui-org/react';
 
-import { useEventListener } from '@/hooks/use-event-listener';
+import { useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
 
-export type DrawerProps = Omit<NextUIDrawerProps, 'children'> & {
-  header?: React.ReactNode;
-  body?: React.ReactNode;
-  footer?: React.ReactNode | ((onClose: Fn) => React.ReactNode);
-  onComfirm?: React.MouseEventHandler<HTMLButtonElement>;
-  onCancel?: React.MouseEventHandler<HTMLButtonElement>;
+export type DrawerState = {
+  isOpen?: boolean;
+  content?: React.ReactNode | ((onClose: Fn) => React.ReactNode);
+  // onComfirm?: React.MouseEventHandler<HTMLButtonElement>;
+  // onCancel?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const key = 'drawer';
 
-const drawerFunc = (data: DrawerProps) => {
+const drawerFunc = (data: { content: DrawerState['content'] }) => {
   trigger(key, { isOpen: true, ...data });
 };
 
@@ -33,44 +24,20 @@ export const drawer = Object.assign(drawerFunc, {
 });
 
 export const Drawer = () => {
-  const [drawerState, setDrawerState] = useState<DrawerProps>({
+  const [drawerState, setDrawerState] = useState<DrawerState>({
     isOpen: false,
-    header: null,
-    body: null,
-    footer: null,
-    onComfirm: undefined,
-    onCancel: undefined,
+    content: () => null,
+    // title: null,
+    // content: null,
+    // onComfirm: undefined,
+    // onCancel: undefined,
   });
 
-  const { header, body, footer, onComfirm, onCancel, ...rest } = drawerState;
+  const { content, ...rest } = drawerState;
 
-  useEventListener(key, (data: DrawerProps) => {
+  useEventListener(key, (data: DrawerState) => {
     setDrawerState(prev => ({ ...prev, ...data }));
   });
-
-  const defaultFooter = (onClose: Fn) => (
-    <>
-      <Button
-        color="danger"
-        variant="flat"
-        onClick={e => {
-          onCancel?.(e);
-          onClose();
-        }}
-      >
-        Close
-      </Button>
-      <Button
-        color="primary"
-        onClick={e => {
-          onComfirm?.(e);
-          onClose();
-        }}
-      >
-        Comfirm
-      </Button>
-    </>
-  );
 
   return (
     <NextUIDrawer
@@ -82,21 +49,9 @@ export const Drawer = () => {
       {...rest}
     >
       <DrawerContent>
-        {onClose => (
-          <>
-            {header && (
-              <DrawerHeader className="flex flex-col gap-1">
-                {header}
-              </DrawerHeader>
-            )}
-            {body && <DrawerBody>{body}</DrawerBody>}
-            <DrawerFooter>
-              {typeof footer === 'function'
-                ? footer(onClose)
-                : footer || defaultFooter(onClose)}
-            </DrawerFooter>
-          </>
-        )}
+        {onClose =>
+          typeof content === 'function' ? content(onClose) : content
+        }
       </DrawerContent>
     </NextUIDrawer>
   );

@@ -1,6 +1,6 @@
-import { DrawerProps } from '.';
+import { DrawerState } from '.';
 
-type Subscriber = (drawer: DrawerProps) => void;
+type Subscriber = (drawer: DrawerState) => void;
 
 class Observer {
   subscribers: Array<Subscriber>;
@@ -19,11 +19,11 @@ class Observer {
     };
   };
 
-  addToast = (data: DrawerProps) => {
+  addToast = (data: DrawerState) => {
     this.subscribers.forEach(subscriber => subscriber(data));
   };
 
-  create = (data: DrawerProps) => {
+  create = (data: DrawerState) => {
     const { ...rest } = data;
 
     const dismissible = data.dismissible ?? true;

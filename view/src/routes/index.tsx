@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { CodeBlock, FileTabs, Sidebar } from '@/components';
-import { Drawer } from '@/components/drawer';
 import { useDisableSave } from '@/hooks';
 import { actions, useStore } from '@/store';
 
@@ -21,14 +20,15 @@ function Index() {
   return (
     <>
       <div className="flex h-screen w-full items-center">
-        <Drawer />
         {/* left */}
         <Sidebar />
         {/* right */}
         <div className="flex flex-1 flex-col items-center justify-center">
           <div className="flex gap-2">
             {tags.map(tag => (
-              <div className="bg-green rounded p-1">{tag}</div>
+              <div key={tag} className="bg-green rounded p-1">
+                {tag}
+              </div>
             ))}
           </div>
           <div className="flex w-[800px] flex-col">

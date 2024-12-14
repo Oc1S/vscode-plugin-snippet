@@ -59,6 +59,15 @@ const snippetStore = createStore('code')(
         draft.fileIndex = draft.codeSets[draft.codeSetIndex].files.length - 1;
       });
     },
+    changeFilename(
+      newName: string,
+      targetSetIndex: number,
+      targetFileIndex: number
+    ) {
+      set.state(draft => {
+        draft.codeSets[targetSetIndex].files[targetFileIndex].name = newName;
+      });
+    },
     removeFileById(id: string) {
       if (get.currentSet().files.length <= 1) {
         return;

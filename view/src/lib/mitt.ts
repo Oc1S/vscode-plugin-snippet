@@ -1,9 +1,9 @@
 import mitt from 'mitt';
 
-import type { DrawerProps } from '@/components';
+import type { DrawerState } from '@/components';
 
 export type Events = {
-  drawer: DrawerProps;
+  drawer: DrawerState;
 };
 
 export const emitter = mitt<Events>();

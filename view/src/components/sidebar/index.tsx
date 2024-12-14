@@ -10,7 +10,7 @@ export const Sidebar = () => {
     <div className="flex w-[200px] flex-col items-center justify-center gap-2">
       <div className="text-xl text-[#e0e055]">CodeSets</div>
       <Reorder.Group
-        className="flex flex-col"
+        className="flex max-h-[90vh] flex-col overflow-y-scroll"
         axis="y"
         values={codeSets}
         onReorder={newSets => {

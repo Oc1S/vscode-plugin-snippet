@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { Input } from '@nextui-org/react';
 import { Reorder, useInView } from 'framer-motion';
 
 import { actions, store, useStore } from '@/store';
 import { cx } from '@/utils';
 
 import { drawer } from '../drawer';
+import { FilenameForm } from '../form/filename-form';
 import { PlusIcon } from '../icons';
 import { CloseIcon } from '../icons/close';
 
@@ -103,15 +103,9 @@ export const FileTabs = () => {
                   }}
                   onDoubleClick={() => {
                     drawer({
-                      header: 'Change Filename',
-                      body: (
-                        <Input
-                          label="Name"
-                          placeholder="New Name"
-                          variant="bordered"
-                        />
+                      content: onClose => (
+                        <FilenameForm onClose={onClose} fileIndex={fileIndex} />
                       ),
-                      onComfirm: () => {},
                     });
                   }}
                 >
