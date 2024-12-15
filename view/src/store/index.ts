@@ -16,6 +16,7 @@ const testCodeSet = Array.from({ length: 100 }, (_, index) => {
   return {
     id: nanoid(),
     name: `test_set_${index}`,
+    tags: ['test', 'for', 'fun'],
     files: Array.from({ length: 1 }, (_, idx) => ({
       id: nanoid(),
       name: `App_${idx}.tsx`,
@@ -51,6 +52,12 @@ const snippetStore = createStore('code')(
       set.state(draft => {
         draft.codeSetIndex = index;
         draft.fileIndex = 0;
+      });
+    },
+    modifyCurrentSet(newData: Partial<(typeof testCodeSet)[0]>) {
+      set.state(draft => {
+        const currentSet = draft.codeSets[draft.codeSetIndex];
+        draft.codeSets[draft.codeSetIndex] = { ...currentSet, ...newData };
       });
     },
     addFile() {

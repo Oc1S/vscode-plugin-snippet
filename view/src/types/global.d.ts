@@ -1,8 +1,10 @@
-type AnyFunction = (...args: any[]) => any
+type AnyFunction = (...args: any[]) => any;
 
-type Fn = () => void
+type Fn = () => void;
 
 interface Window {
-  __inject_path: string
-  isVSCodeWebview: boolean
+  __inject_path: string;
+  isVSCodeWebview: boolean;
 }
+
+type Tag = string;

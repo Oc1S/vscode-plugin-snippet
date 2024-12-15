@@ -8,6 +8,7 @@ import {
 } from '@nextui-org/react';
 
 import { actions, store, useStore } from '@/store';
+
 export type FilenameFormProps = {
   fileIndex: number;
   onClose: Fn;
@@ -22,7 +23,6 @@ export const FilenameForm = ({ fileIndex, onClose }: FilenameFormProps) => {
     <form
       className="flex flex-1 flex-col"
       onSubmit={handleSubmit(data => {
-        console.log(data, '@');
         actions.snippet.changeFilename(
           data.filename,
           store.snippet.codeSetIndex(),

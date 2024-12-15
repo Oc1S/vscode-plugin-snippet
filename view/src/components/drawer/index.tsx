@@ -49,9 +49,9 @@ export const Drawer = () => {
       {...rest}
     >
       <DrawerContent>
-        {onClose =>
-          typeof content === 'function' ? content(onClose) : content
-        }
+        {onClose => (
+          <>{typeof content === 'function' ? content(onClose) : content}</>
+        )}
       </DrawerContent>
     </NextUIDrawer>
   );

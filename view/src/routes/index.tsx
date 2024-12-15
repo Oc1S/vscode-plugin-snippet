@@ -1,10 +1,10 @@
+import { Chip, Input } from '@nextui-org/react';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { CodeBlock, FileTabs, Sidebar } from '@/components';
+import { CodeBlock, drawer, FileTabs, Sidebar } from '@/components';
+import { TagsForm } from '@/components/form/tag-form';
 import { useDisableSave } from '@/hooks';
 import { actions, useStore } from '@/store';
-
-const tags = ['1', '2', '3'];
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -19,16 +19,27 @@ function Index() {
 
   return (
     <>
-      <div className="flex h-screen w-full items-center">
+      <div className="flex h-screen w-full select-none items-center">
         {/* left */}
         <Sidebar />
         {/* right */}
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col items-center justify-center gap-8">
+          <Input placeholder="search" />
           <div className="flex gap-2">
-            {tags.map(tag => (
-              <div key={tag} className="bg-green rounded p-1">
+            {currentSet.tags.map(tag => (
+              <Chip
+                key={tag}
+                color="primary"
+                variant="flat"
+                className="cursor-pointer hover:opacity-90"
+                onDoubleClick={() => {
+                  drawer({
+                    content: <TagsForm />,
+                  });
+                }}
+              >
                 {tag}
-              </div>
+              </Chip>
             ))}
           </div>
           <div className="flex w-[800px] flex-col">
