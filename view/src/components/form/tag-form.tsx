@@ -4,12 +4,12 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
-  Input,
 } from '@nextui-org/react';
 
 import { actions, useStore } from '@/store';
 
 import { drawer } from '../drawer';
+import { Input } from '../input';
 
 export const TagsForm = () => {
   const snippetSet = useStore().snippet.currentSet();
@@ -45,7 +45,7 @@ export const TagsForm = () => {
         <Button
           color="primary"
           variant="flat"
-          onClick={() => {
+          onPress={() => {
             setTags([...tags, '']);
           }}
         >
@@ -53,12 +53,12 @@ export const TagsForm = () => {
         </Button>
       </DrawerBody>
       <DrawerFooter>
-        <Button color="danger" variant="flat" onClick={onClose}>
+        <Button color="danger" variant="flat" onPress={onClose}>
           Close
         </Button>
         <Button
           color="primary"
-          onClick={() => {
+          onPress={() => {
             actions.snippet.modifyCurrentSet({ tags: tags.filter(Boolean) });
             onClose();
           }}

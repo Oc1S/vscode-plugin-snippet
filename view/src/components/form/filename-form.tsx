@@ -44,7 +44,7 @@ export const FilenameForm = ({ fileIndex, onClose }: FilenameFormProps) => {
         />
       </DrawerBody>
       <DrawerFooter>
-        <Button color="danger" variant="flat" onClick={onClose}>
+        <Button color="danger" variant="flat" onPress={onClose}>
           Close
         </Button>
         <Button type="submit" color="primary">

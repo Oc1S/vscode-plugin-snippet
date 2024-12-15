@@ -1,16 +1,27 @@
-import { FC } from 'react';
+import { forwardRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Input as NextUIInput, InputProps } from '@nextui-org/react';
 
-export const Input: FC<InputProps & { name: string }> = ({ name, ...rest }) => {
-  const { register } = useFormContext();
-  return (
-    <NextUIInput
-      label="Name"
-      placeholder="New Name"
-      variant="bordered"
-      {...rest}
-      {...register(name)}
-    />
-  );
-};
+import { cx } from '@/utils';
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ name, classNames = {}, ...rest }, ref) => {
+    const { register } = useFormContext() || {};
+    const { inputWrapper } = classNames;
+
+    return (
+      <NextUIInput
+        {...rest}
+        {...(name ? register(name) : {})}
+        classNames={{
+          ...classNames,
+          inputWrapper: cx(
+            inputWrapper,
+            `hover:!bg-default-100 !transition hover:opacity-80`
+          ),
+        }}
+        ref={ref}
+      />
+    );
+  }
+);

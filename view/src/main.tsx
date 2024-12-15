@@ -6,6 +6,8 @@ import { createRoot } from 'react-dom/client';
 import { NextUIProvider } from '@nextui-org/react';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 
+window.process = window.process || {};
+
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 

@@ -8,7 +8,7 @@ export const Sidebar = () => {
   const codeSetIndex = useStore().snippet.codeSetIndex();
   return (
     <div className="flex w-[200px] flex-col items-center justify-center gap-2">
-      <div className="text-xl text-[#e0e055]">CodeSets</div>
+      <div className="text-xl text-[#e0e055]">SnippetSets</div>
       <Reorder.Group
         className="flex max-h-[90vh] flex-col overflow-y-scroll"
         axis="y"
