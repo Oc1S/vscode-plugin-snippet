@@ -1,49 +1,18 @@
-import { useState } from 'react';
-// src/popover-trigger.tsx
-import { Children, cloneElement, useMemo } from 'react';
-import { jsx } from 'react/jsx-runtime';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  PopoverTrigger,
-  usePopoverContext,
-} from '@nextui-org/react';
-import { pickChildren } from '@nextui-org/react-utils';
-import { useAriaButton } from '@nextui-org/use-aria-button';
-import { mergeProps } from '@react-aria/utils';
+import { FC, useState } from 'react';
+import { motion, Variants } from 'framer-motion';
 
 import { store } from '@/store';
 
 import { Input } from '../input';
-// let PopoverTrigger = props => {
-//   let _a;
-//   const { triggerRef, getTriggerProps } = usePopoverContext();
-//   const { children, ...otherProps } = props;
-//   const child = useMemo(() => {
-//     if (typeof children === 'string')
-//       return /* @__PURE__ */ jsx('p', { children });
-//     return Children.only(children);
-//   }, [children]);
-//   const childRef = (_a = child.props.ref) != null ? _a : child.ref;
-//   const { onPress, isDisabled, ...restProps } = useMemo(() => {
-//     return getTriggerProps(mergeProps(otherProps, child.props), childRef);
-//   }, [getTriggerProps, child.props, otherProps, childRef]);
-//   const [, triggerChildren] = pickChildren(children, Button);
-//   const { buttonProps } = useAriaButton({ onPress, isDisabled }, triggerRef);
-//   const hasNextUIButton = useMemo(() => {
-//     return (triggerChildren == null ? void 0 : triggerChildren[0]) !== void 0;
-//   }, [triggerChildren]);
-//   return cloneElement(
-//     child,
-//     mergeProps(
-//       restProps,
-//       hasNextUIButton ? { onPress, isDisabled } : buttonProps
-//     )
-//   );
-// };
+
+const itemVariants: Variants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 300, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
 
 export const Search = () => {
   const [searchResult, setSearchResult] = useState<any[]>([]);
@@ -57,21 +26,60 @@ export const Search = () => {
     });
     setSearchResult(result);
   };
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center">
-      <Dropdown placement="bottom-start">
-        <DropdownTrigger>
-          <Input
-            placeholder="Search"
-            className="w-[400px]"
-            onValueChange={search}
-          />
-        </DropdownTrigger>
-        <DropdownMenu aria-label="actions" variant="flat">
-          <DropdownItem key="profile">Signed in as</DropdownItem>
-          <DropdownItem key="settings">My Settings</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+      <Dropdown isOpen={isOpen} />
+      <Input
+        placeholder="Search"
+        className="w-[400px]"
+        onValueChange={search}
+        onFocus={() => setIsOpen(true)}
+        // onBlur={() => setIsOpen(false)}
+      />
     </div>
+  );
+};
+
+export const Dropdown: FC<{
+  isOpen: boolean;
+}> = ({ isOpen }) => {
+  return (
+    <motion.nav
+      initial={false}
+      animate={isOpen ? 'open' : 'closed'}
+      className="menu w-[300px] shadow-[#4700b3] drop-shadow-lg"
+    >
+      <motion.ul
+        className="flex flex-col gap-2 bg-white p-2 text-[#6600ff]"
+        variants={{
+          open: {
+            clipPath: 'inset(0% 0% 0% 0% round 10px)',
+            transition: {
+              type: 'spring',
+              bounce: 0,
+              duration: 0.7,
+              delayChildren: 0.3,
+              staggerChildren: 0.05,
+            },
+          },
+          closed: {
+            clipPath: 'inset(10% 50% 90% 50% round 10px)',
+            transition: {
+              type: 'spring',
+              bounce: 0,
+              duration: 0.3,
+            },
+          },
+        }}
+        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+      >
+        {Array.from({ length: 5 }).map((_, i) => (
+          <motion.li className="block p-2" variants={itemVariants}>
+            Item {i}
+          </motion.li>
+        ))}
+      </motion.ul>
+    </motion.nav>
   );
 };
