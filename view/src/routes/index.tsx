@@ -1,7 +1,7 @@
 import { Chip } from '@nextui-org/react';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { CodeBlock, drawer, FileTabs, Input, Sidebar } from '@/components';
+import { CodeBlock, drawer, FileTabs, Sidebar } from '@/components';
 import { TagsForm } from '@/components/form/tag-form';
 import { Search } from '@/components/search';
 import { useDisableSave } from '@/hooks';

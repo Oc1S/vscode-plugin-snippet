@@ -5,6 +5,7 @@ import {
   DrawerFooter,
   DrawerHeader,
 } from '@nextui-org/react';
+import { motion } from 'framer-motion';
 
 import { actions, useStore } from '@/store';
 
@@ -28,7 +29,7 @@ export const TagsForm = () => {
       }}
     >
       <DrawerHeader className="flex flex-col gap-1">Change Tags</DrawerHeader>
-      <DrawerBody>
+      <DrawerBody className="pb-40">
         {tags.map((tag, index) => (
           <Input
             key={index}
@@ -42,15 +43,18 @@ export const TagsForm = () => {
             }}
           />
         ))}
-        <Button
-          color="primary"
-          variant="flat"
-          onPress={() => {
-            setTags([...tags, '']);
-          }}
-        >
-          Add Tag
-        </Button>
+        <motion.div layout>
+          <Button
+            fullWidth
+            color="primary"
+            variant="flat"
+            onPress={() => {
+              setTags([...tags, '']);
+            }}
+          >
+            Add Tag
+          </Button>
+        </motion.div>
       </DrawerBody>
       <DrawerFooter>
         <Button color="danger" variant="flat" onPress={onClose}>

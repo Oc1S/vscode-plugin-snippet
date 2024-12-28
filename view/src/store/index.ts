@@ -12,7 +12,7 @@ const generateFile = () => ({
 });
 
 /* TODO:for test */
-const testCodeSet = Array.from({ length: 100 }, (_, index) => {
+const testCodeSets = Array.from({ length: 100 }, (_, index) => {
   return {
     id: nanoid(),
     name: `test_set_${index}`,
@@ -25,11 +25,13 @@ const testCodeSet = Array.from({ length: 100 }, (_, index) => {
   };
 });
 
+export type CodeSet = (typeof testCodeSets)[0];
+
 const snippetStore = createStore('code')(
   {
     codeSetIndex: 0,
     fileIndex: 0,
-    codeSets: testCodeSet,
+    codeSets: testCodeSets,
   },
   {
     persist: {
@@ -54,7 +56,7 @@ const snippetStore = createStore('code')(
         draft.fileIndex = 0;
       });
     },
-    modifyCurrentSet(newData: Partial<(typeof testCodeSet)[0]>) {
+    modifyCurrentSet(newData: Partial<CodeSet>) {
       set.state(draft => {
         const currentSet = draft.codeSets[draft.codeSetIndex];
         draft.codeSets[draft.codeSetIndex] = { ...currentSet, ...newData };
@@ -97,6 +99,15 @@ const snippetStore = createStore('code')(
           draft.fileIndex = newIndex;
         }
       });
+    },
+  }))
+  .extendActions((set, get) => ({
+    changeCodeSetById: (codeSetId: string) => {
+      if (get.currentSet().id === codeSetId) {
+        return;
+      }
+      const targetIndex = get.codeSets().findIndex(s => s.id === codeSetId);
+      set.changeCodeSet(targetIndex);
     },
   }));
 
