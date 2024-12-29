@@ -5,27 +5,49 @@ import { isBrowser } from '@/constants';
 
 import { demoCode } from '../demo';
 
-const generateFile = () => ({
+export type IFile = {
+  id: string;
+  name: string;
+  code: string;
+};
+
+export type ICodeSet = {
+  id: string;
+  name: string;
+  tags: string[];
+  files: IFile[];
+};
+
+const generateFile = (data?: Partial<IFile>) => ({
   id: nanoid(),
   name: `new-${Date.now()}.tsx`,
   code: '',
+  ...data,
 });
 
-/* TODO:for test */
-const testCodeSets = Array.from({ length: 100 }, (_, index) => {
+const generateCodeSet = (data?: Partial<ICodeSet>) => {
   return {
     id: nanoid(),
+    name: `new-${Date.now()}`,
+    tags: [],
+    files: [generateFile()],
+    ...data,
+  };
+};
+
+/* TODO:for test */
+const testCodeSets = Array.from({ length: 20 }, (_, index) => {
+  return generateCodeSet({
     name: `test_set_${index}`,
     tags: ['test', 'for', 'fun'],
-    files: Array.from({ length: 1 }, (_, idx) => ({
-      id: nanoid(),
-      name: `App_${idx}.tsx`,
-      code: demoCode,
-    })),
-  };
+    files: Array.from({ length: 3 }, (_, idx) =>
+      generateFile({
+        name: `App_${idx}.tsx`,
+        code: demoCode,
+      })
+    ),
+  });
 });
-
-export type CodeSet = (typeof testCodeSets)[0];
 
 const snippetStore = createStore('code')(
   {
@@ -47,6 +69,7 @@ const snippetStore = createStore('code')(
       get.codeSets()[get.codeSetIndex()].files[get.fileIndex()],
   }))
   .extendActions((set, get) => ({
+    /* code set -- start */
     changeCodeSet: (index: number) => {
       if (get.codeSetIndex() === index) {
         return;
@@ -56,12 +79,21 @@ const snippetStore = createStore('code')(
         draft.fileIndex = 0;
       });
     },
-    modifyCurrentSet(newData: Partial<CodeSet>) {
+    modifyCurrentSet(newData: Partial<ICodeSet>) {
       set.state(draft => {
         const currentSet = draft.codeSets[draft.codeSetIndex];
         draft.codeSets[draft.codeSetIndex] = { ...currentSet, ...newData };
       });
     },
+    addCodeSet() {
+      set.state(draft => {
+        draft.codeSets.push(generateCodeSet());
+        draft.codeSetIndex = draft.codeSets.length - 1;
+        draft.fileIndex = 0;
+      });
+    },
+    /* code set -- end */
+    /* file -- start */
     addFile() {
       set.state(draft => {
         draft.codeSets[draft.codeSetIndex].files.push(generateFile());
@@ -100,8 +132,10 @@ const snippetStore = createStore('code')(
         }
       });
     },
+    /* file -- end */
   }))
   .extendActions((set, get) => ({
+    // based on **changeCodeSet**
     changeCodeSetById: (codeSetId: string) => {
       if (get.currentSet().id === codeSetId) {
         return;
@@ -111,13 +145,8 @@ const snippetStore = createStore('code')(
     },
   }));
 
-const drawerStore = createStore('drawer')({
-  rename: false,
-});
-
 export const rootStore = {
   snippet: snippetStore,
-  drawer: drawerStore,
 };
 
 export const useStore = () => mapValuesKey('use', rootStore);

@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Listbox, ListboxItem } from '@nextui-org/react';
-import { AnimatePresence, motion, transform } from 'framer-motion';
+import { Listbox, ListboxItem, ListboxItemProps } from '@nextui-org/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
+import { actions } from '@/store';
 import { cx } from '@/utils';
 
-import {
-  AddNoteIcon,
-  CopyDocumentIcon,
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-} from './icons';
+import { drawer } from '../drawer';
+import { CodeSetForm } from '../form/code-set-form';
+import { AddNoteIcon, DeleteDocumentIcon, EditDocumentIcon } from './icons';
 
 export type ContextMenuState = {
   isOpen?: boolean;
-  content?: React.ReactNode | ((onClose: Fn) => React.ReactNode);
+  list?: ListboxItemProps[];
   style?: React.CSSProperties;
 };
 
-const menuVariants = {
-  open: {
+const menuVariant = {
+  initial: {
+    scale: 0,
+  },
+  animate: {
     scale: 1,
     transition: {
       type: 'spring',
-      bounce: 0.2,
+      bounce: 0.3,
       duration: 0.3,
       delayChildren: 0.2,
       staggerChildren: 0.05,
     },
   },
-  closed: {
+  exit: {
     scale: 0,
     transition: {
       type: 'spring',
@@ -52,17 +53,38 @@ export const contextMenu = Object.assign(contextMenuFunc, {
   },
 });
 
+const iconClasses =
+  'text-xl text-default-500 pointer-events-none flex-shrink-0';
+const list: ListboxItemProps[] = [
+  {
+    id: 'new',
+    children: 'New Snippet',
+    startContent: <AddNoteIcon className={iconClasses} />,
+  },
+  {
+    id: 'edit',
+    children: 'Edit Snippet',
+    startContent: <EditDocumentIcon className={iconClasses} />,
+    showDivider: true,
+  },
+  {
+    id: 'delete',
+    className: 'text-danger',
+    children: 'Delete Snippet',
+    color: 'danger',
+    startContent: (
+      <DeleteDocumentIcon className={cx(iconClasses, 'text-danger')} />
+    ),
+  },
+];
+
 export const ContextMenu = () => {
   const [contextMenuState, setContextMenuState] = useState<
     Required<ContextMenuState>
   >({
     isOpen: false,
     style: {},
-    content: () => null,
-    // title: null,
-    // content: null,
-    // onComfirm: undefined,
-    // onCancel: undefined,
+    list: [],
   });
 
   const { isOpen, style, ...rest } = contextMenuState;
@@ -79,13 +101,23 @@ export const ContextMenu = () => {
     return () => window.removeEventListener('click', handler, true);
   }, [isOpen]);
 
-  const iconClasses =
-    'text-xl text-default-500 pointer-events-none flex-shrink-0';
-
   const position = `${style.top}_${style.height}`;
 
   const onSelect = (key: React.Key) => {
     console.log('action', key);
+    switch (key) {
+      case 'new':
+        actions.snippet.addCodeSet();
+        break;
+      case 'edit':
+        drawer({
+          content: <CodeSetForm />,
+        });
+        break;
+      case 'delete':
+      default:
+        break;
+    }
   };
   return (
     <AnimatePresence>
@@ -93,68 +125,17 @@ export const ContextMenu = () => {
         <div key={position} className="fixed" style={style}>
           <motion.div
             className="border-small rounded-small border-default-100 bg-dark-deeper w-full max-w-[260px] origin-top-left px-1 py-2 backdrop-blur"
-            initial={{
-              scale: 0,
-            }}
-            animate={{
-              scale: 1,
-              transition: {
-                type: 'spring',
-                bounce: 0.3,
-                duration: 0.3,
-                delayChildren: 0.2,
-                staggerChildren: 0.05,
-              },
-            }}
-            exit={{
-              scale: 0,
-              transition: {
-                type: 'spring',
-                bounce: 0,
-                duration: 0.2,
-              },
-            }}
+            {...menuVariant}
           >
             <Listbox
-              aria-label="Listbox menu with descriptions"
+              aria-label="context-menu"
               variant="flat"
               onAction={onSelect}
             >
-              <ListboxItem
-                key="new"
-                description="Create a new file"
-                startContent={<AddNoteIcon className={iconClasses} />}
-              >
-                New file
-              </ListboxItem>
-              <ListboxItem
-                key="copy"
-                description="Copy the file link"
-                startContent={<CopyDocumentIcon className={iconClasses} />}
-              >
-                Copy link
-              </ListboxItem>
-              {/* <ListboxItem
-                key="edit"
-                showDivider
-                description="Allows you to edit the file"
-                startContent={<EditDocumentIcon className={iconClasses} />}
-              >
-                Edit file
-              </ListboxItem> */}
-              <ListboxItem
-                key="delete"
-                className="text-danger"
-                color="danger"
-                description="Permanently delete the file"
-                startContent={
-                  <DeleteDocumentIcon
-                    className={cx(iconClasses, 'text-danger')}
-                  />
-                }
-              >
-                Delete file
-              </ListboxItem>
+              {list.map(item => {
+                const { id, ...rest } = item;
+                return <ListboxItem key={id} {...rest} />;
+              })}
             </Listbox>
           </motion.div>
         </div>

@@ -8,11 +8,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ name, classNames = {}, ...rest }, ref) => {
     const { register } = useFormContext() || {};
     const { inputWrapper } = classNames;
+    if (rest.label === 'Name') {
+      console.log({ ...rest }, 'rest@@', register, ref);
+    }
 
     return (
       <NextUIInput
-        {...rest}
-        {...(name ? register(name) : {})}
+        {...(name && register ? register(name) : {})}
         classNames={{
           ...classNames,
           inputWrapper: cx(
@@ -21,6 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ),
         }}
         ref={ref}
+        {...rest}
       />
     );
   }

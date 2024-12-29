@@ -28,7 +28,6 @@ export const Drawer = () => {
     isOpen: false,
     content: () => null,
     // title: null,
-    // content: null,
     // onComfirm: undefined,
     // onCancel: undefined,
   });

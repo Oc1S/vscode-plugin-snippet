@@ -1,7 +1,6 @@
 import './styles/index.css';
 import './styles/scrollbar.css';
 
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { NextUIProvider } from '@nextui-org/react';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
@@ -21,9 +20,7 @@ declare module '@tanstack/react-router' {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <NextUIProvider>
-      <RouterProvider router={router} />
-    </NextUIProvider>
-  </StrictMode>
+  <NextUIProvider>
+    <RouterProvider router={router} />
+  </NextUIProvider>
 );

@@ -1,9 +1,8 @@
-import { Chip } from '@nextui-org/react';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { CodeBlock, drawer, FileTabs, Sidebar } from '@/components';
-import { TagsForm } from '@/components/form/tag-form';
+import { CodeBlock, FileTabs, Sidebar } from '@/components';
 import { Search } from '@/components/search';
+import { Tag } from '@/components/tag';
 import { useDisableContextMenu, useDisableSave } from '@/hooks';
 import { actions, useStore } from '@/store';
 
@@ -32,19 +31,7 @@ function Index() {
             <div>Tags:</div>
             <div className="flex gap-2">
               {currentSet.tags.map(tag => (
-                <Chip
-                  key={tag}
-                  color="primary"
-                  variant="flat"
-                  className="cursor-pointer hover:opacity-90"
-                  onDoubleClick={() => {
-                    drawer({
-                      content: <TagsForm />,
-                    });
-                  }}
-                >
-                  {tag}
-                </Chip>
+                <Tag key={tag} value={tag} />
               ))}
             </div>
           </div>

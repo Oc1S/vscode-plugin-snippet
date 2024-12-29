@@ -103,9 +103,7 @@ export const FileTabs = () => {
                   }}
                   onDoubleClick={() => {
                     drawer({
-                      content: onClose => (
-                        <FilenameForm onClose={onClose} fileIndex={fileIndex} />
-                      ),
+                      content: <FilenameForm fileIndex={fileIndex} />,
                     });
                   }}
                 >

@@ -5,7 +5,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 import { useBlockScroll, useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
 import { menuVariants } from '@/lib/motion';
-import { actions, CodeSet, store } from '@/store';
+import { actions, ICodeSet, store } from '@/store';
 
 import { Input } from '../input';
 
@@ -19,7 +19,8 @@ const itemVariants: Variants = {
 };
 
 export const Search = () => {
-  const [searchResult, setSearchResult] = useState<CodeSet[]>([]);
+  const [input, setInput] = useState('');
+  const [searchResult, setSearchResult] = useState<ICodeSet[]>([]);
 
   const search = (val: string) => {
     const codeSets = store.snippet.codeSets();
@@ -33,6 +34,11 @@ export const Search = () => {
     trigger('dropdown', true);
   };
 
+  const reset = () => {
+    setInput('');
+    setSearchResult([]);
+  };
+
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     /* line */
@@ -40,10 +46,16 @@ export const Search = () => {
       {/* relative container */}
       <div className="relative" ref={containerRef}>
         <Input
+          value={input}
           placeholder="Search"
           className="w-[400px]"
-          onValueChange={search}
-          onFocus={e => e.target.value && trigger('dropdown', true)}
+          onValueChange={value => {
+            setInput(value);
+            search(value);
+          }}
+          onFocus={() => {
+            input && trigger('dropdown', true);
+          }}
         />
         <Dropdown
           list={searchResult.map(result => ({
@@ -51,6 +63,7 @@ export const Search = () => {
             label: result.name,
           }))}
           outsideElement={containerRef}
+          onSelect={reset}
         />
       </div>
     </div>
@@ -58,11 +71,13 @@ export const Search = () => {
 };
 
 type Item = { label: string; id: string };
+
 export const Dropdown = (props: {
   list: Item[];
   outsideElement: RefObject<HTMLElement>;
+  onSelect?: (item: Item, index: number) => void;
 }) => {
-  const { list, outsideElement } = props;
+  const { list, outsideElement, onSelect } = props;
   const [isOpen, setIsOpen] = useState(false);
   // const ref = useRef<HTMLUListElement>(null);
   useOnClickOutside(outsideElement, () => {
@@ -72,19 +87,21 @@ export const Dropdown = (props: {
   useEventListener('dropdown', setIsOpen);
   useBlockScroll(isOpen);
 
-  const handleSelect = (item: Item, _index: number) => {
+  const handleSelect = (item: Item, index: number) => {
     actions.snippet.changeCodeSetById(item.id);
     setIsOpen(false);
+    onSelect?.(item, index);
   };
 
-  const visible = isOpen;
+  console.log(isOpen);
+
   const hasItem = list.length > 0;
   return (
     <motion.div
       id="dropdown-menu"
       className="z-pop bg-default-300/20 no-scrollbar absolute left-0 top-full flex max-h-[416px] w-full translate-y-0.5 flex-col overflow-scroll rounded-lg p-2 text-white backdrop-blur-lg"
       initial={false}
-      animate={visible ? 'open' : 'closed'}
+      animate={isOpen ? 'open' : 'closed'}
       variants={menuVariants}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
     >

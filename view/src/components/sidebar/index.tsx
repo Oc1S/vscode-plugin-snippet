@@ -8,6 +8,7 @@ import { contextMenu } from '../context-menu';
 
 export const Sidebar = () => {
   const codeSets = useStore().snippet.codeSets();
+
   return (
     <div className="flex min-w-[200px] flex-col items-center justify-center gap-2">
       <motion.div
@@ -27,6 +28,11 @@ export const Sidebar = () => {
           classNames={{
             cursor: 'rounded',
           }}
+          selectedKey={useStore().snippet.currentSet().id}
+          onSelectionChange={id => {
+            const index = codeSets.findIndex(s => s.id === id);
+            actions.snippet.changeCodeSet(index);
+          }}
         >
           {codeSets.map((s, index) => {
             return (
@@ -34,7 +40,7 @@ export const Sidebar = () => {
                 key={s.id}
                 title={s.name}
                 className={cx(
-                  'flex w-32 cursor-pointer items-center justify-center rounded px-4 text-[#eee] transition hover:bg-white/10 hover:opacity-90'
+                  'flex min-w-32 max-w-[180px] cursor-pointer items-center justify-center truncate rounded px-4 text-[#eee] transition hover:bg-white/10 hover:opacity-90'
                 )}
                 onClick={() => actions.snippet.changeCodeSet(index)}
                 onContextMenu={e => {

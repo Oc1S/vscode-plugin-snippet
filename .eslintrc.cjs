@@ -62,4 +62,4 @@ module.exports = {
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     '@typescript-eslint/no-require-imports': 'off',
   },
-}
+};

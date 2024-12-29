@@ -1,51 +1,43 @@
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Button,
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
-  Input,
 } from '@nextui-org/react';
 
-import { actions, store, useStore } from '@/store';
+import { actions, useStore } from '@/store';
 
 import { drawer } from '../drawer';
+import { Input } from '../input';
+// import { Input } from '../input';
 
-export type FilenameFormProps = {
-  fileIndex: number;
-};
-
-export const FilenameForm = ({ fileIndex }: FilenameFormProps) => {
+export const CodeSetForm = () => {
   const { handleSubmit, register } = useForm();
-  const snippetSet = useStore().snippet.currentSet();
-  const file = snippetSet.files[fileIndex];
-  const { name } = file;
+  const snippet = useStore().snippet.currentSet();
+
+  const onSubmit: SubmitHandler<FieldValues> = data => {
+    console.log(data, '2@@');
+    actions.snippet.modifyCurrentSet(data);
+    // onClose();
+  };
 
   const onClose = () => {
     drawer.dismiss();
   };
+
   return (
-    <form
-      className="flex flex-1 flex-col"
-      onSubmit={handleSubmit(data => {
-        actions.snippet.changeFilename(
-          data.filename,
-          store.snippet.codeSetIndex(),
-          fileIndex
-        );
-        onClose();
-      })}
-    >
+    <form className="flex flex-1 flex-col" onSubmit={handleSubmit(onSubmit)}>
       <DrawerHeader className="flex flex-col gap-1">
-        Change Filename
+        Change Snippet
       </DrawerHeader>
       <DrawerBody>
         <Input
           label="Name"
           placeholder="New Name"
           variant="bordered"
-          defaultValue={name}
-          {...register('filename')}
+          // defaultValue={snippet.name}
+          {...register('name1')}
         />
       </DrawerBody>
       <DrawerFooter>
