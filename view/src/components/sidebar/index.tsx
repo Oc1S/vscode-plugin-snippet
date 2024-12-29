@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { actions, useStore } from '@/store';
 import { cx } from '@/utils';
 
-import { contextMenu } from '../context-menu';
+import { snippetMenu } from '../context-menu/snippet-menu';
 
 export const Sidebar = () => {
   const codeSets = useStore().snippet.codeSets();
@@ -38,18 +38,16 @@ export const Sidebar = () => {
             return (
               <Tab
                 key={s.id}
-                title={s.name}
+                title={<span className="truncate">{s.name}</span>}
                 className={cx(
-                  'flex min-w-32 max-w-[180px] cursor-pointer items-center justify-center truncate rounded px-4 text-[#eee] transition hover:bg-white/10 hover:opacity-90'
+                  'flex min-w-32 max-w-[180px] cursor-pointer items-center justify-center rounded px-4 text-[#eee] transition hover:bg-white/10 hover:opacity-90'
                 )}
                 onClick={() => actions.snippet.changeCodeSet(index)}
                 onContextMenu={e => {
                   e.preventDefault();
-                  contextMenu({
-                    style: {
-                      left: e.clientX,
-                      top: e.clientY,
-                    },
+                  snippetMenu({
+                    left: e.clientX,
+                    top: e.clientY,
                   });
                 }}
               />

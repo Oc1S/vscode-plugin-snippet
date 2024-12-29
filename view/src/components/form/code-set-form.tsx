@@ -1,4 +1,4 @@
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler } from 'react-hook-form';
 import {
   Button,
   DrawerBody,
@@ -10,16 +10,14 @@ import { actions, useStore } from '@/store';
 
 import { drawer } from '../drawer';
 import { Input } from '../input';
-// import { Input } from '../input';
+import { Form } from './form';
 
 export const CodeSetForm = () => {
-  const { handleSubmit, register } = useForm();
   const snippet = useStore().snippet.currentSet();
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
-    console.log(data, '2@@');
     actions.snippet.modifyCurrentSet(data);
-    // onClose();
+    onClose();
   };
 
   const onClose = () => {
@@ -27,7 +25,7 @@ export const CodeSetForm = () => {
   };
 
   return (
-    <form className="flex flex-1 flex-col" onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={onSubmit}>
       <DrawerHeader className="flex flex-col gap-1">
         Change Snippet
       </DrawerHeader>
@@ -36,8 +34,8 @@ export const CodeSetForm = () => {
           label="Name"
           placeholder="New Name"
           variant="bordered"
-          // defaultValue={snippet.name}
-          {...register('name1')}
+          field="name"
+          defaultValue={snippet.name}
         />
       </DrawerBody>
       <DrawerFooter>
@@ -48,6 +46,6 @@ export const CodeSetForm = () => {
           Comfirm
         </Button>
       </DrawerFooter>
-    </form>
+    </Form>
   );
 };

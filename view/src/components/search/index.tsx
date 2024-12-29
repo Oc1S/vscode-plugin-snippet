@@ -93,8 +93,6 @@ export const Dropdown = (props: {
     onSelect?.(item, index);
   };
 
-  console.log(isOpen);
-
   const hasItem = list.length > 0;
   return (
     <motion.div

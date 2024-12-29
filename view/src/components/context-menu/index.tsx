@@ -5,11 +5,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
 import { actions } from '@/store';
-import { cx } from '@/utils';
 
 import { drawer } from '../drawer';
 import { CodeSetForm } from '../form/code-set-form';
-import { AddNoteIcon, DeleteDocumentIcon, EditDocumentIcon } from './icons';
 
 export type ContextMenuState = {
   isOpen?: boolean;
@@ -43,7 +41,9 @@ const menuVariant = {
 
 const key = 'context-menu';
 
-const contextMenuFunc = (data: ContextMenuState) => {
+const contextMenuFunc = (
+  data: ContextMenuState & Required<Pick<ContextMenuState, 'list' | 'style'>>
+) => {
   trigger(key, { isOpen: true, ...data });
 };
 
@@ -52,31 +52,6 @@ export const contextMenu = Object.assign(contextMenuFunc, {
     trigger(key, { isOpen: false });
   },
 });
-
-const iconClasses =
-  'text-xl text-default-500 pointer-events-none flex-shrink-0';
-const list: ListboxItemProps[] = [
-  {
-    id: 'new',
-    children: 'New Snippet',
-    startContent: <AddNoteIcon className={iconClasses} />,
-  },
-  {
-    id: 'edit',
-    children: 'Edit Snippet',
-    startContent: <EditDocumentIcon className={iconClasses} />,
-    showDivider: true,
-  },
-  {
-    id: 'delete',
-    className: 'text-danger',
-    children: 'Delete Snippet',
-    color: 'danger',
-    startContent: (
-      <DeleteDocumentIcon className={cx(iconClasses, 'text-danger')} />
-    ),
-  },
-];
 
 export const ContextMenu = () => {
   const [contextMenuState, setContextMenuState] = useState<
@@ -87,21 +62,21 @@ export const ContextMenu = () => {
     list: [],
   });
 
-  const { isOpen, style, ...rest } = contextMenuState;
+  const { isOpen, style, list } = contextMenuState;
 
   useEventListener(key, (data: ContextMenuState) => {
     setContextMenuState(prev => ({ ...prev, ...data }));
   });
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const handler = () => {
       setContextMenuState(prev => ({ ...prev, isOpen: false }));
     };
     window.addEventListener('click', handler, true);
     return () => window.removeEventListener('click', handler, true);
-  }, [isOpen]);
+  }, []);
 
-  const position = `${style.top}_${style.height}`;
+  const position = `${style.top ?? ''}_${style.right ?? ''}_${style.bottom ?? ''}_${style.left ?? ''}`;
 
   const onSelect = (key: React.Key) => {
     console.log('action', key);
