@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { actions, useStore } from '@/store';
 import { cx } from '@/utils';
 
+import { contextMenu } from '../context-menu';
+
 export const Sidebar = () => {
   const codeSets = useStore().snippet.codeSets();
   return (
@@ -20,7 +22,7 @@ export const Sidebar = () => {
       <div className="flex max-h-[90vh] w-full flex-col items-center overflow-y-scroll">
         <Tabs
           variant="light"
-          color="secondary"
+          color="default"
           isVertical
           classNames={{
             cursor: 'rounded',
@@ -37,6 +39,12 @@ export const Sidebar = () => {
                 onClick={() => actions.snippet.changeCodeSet(index)}
                 onContextMenu={e => {
                   e.preventDefault();
+                  contextMenu({
+                    style: {
+                      left: e.clientX,
+                      top: e.clientY,
+                    },
+                  });
                 }}
               />
             );

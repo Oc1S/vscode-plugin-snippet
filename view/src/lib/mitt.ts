@@ -6,7 +6,7 @@ import type { ContextMenuState } from '@/components/context-menu';
 export type Events = {
   dropdown: boolean;
   drawer: DrawerState;
-  contextmenu: ContextMenuState;
+  'context-menu': ContextMenuState;
 };
 
 export const emitter = mitt<Events>();

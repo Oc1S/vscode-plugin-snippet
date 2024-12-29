@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { CodeBlock, drawer, FileTabs, Sidebar } from '@/components';
 import { TagsForm } from '@/components/form/tag-form';
 import { Search } from '@/components/search';
-import { useDisableSave } from '@/hooks';
+import { useDisableContextMenu, useDisableSave } from '@/hooks';
 import { actions, useStore } from '@/store';
 
 export const Route = createFileRoute('/')({
@@ -17,6 +17,7 @@ function Index() {
   const currentSet = useStore().snippet.currentSet();
 
   useDisableSave();
+  useDisableContextMenu();
 
   return (
     <>

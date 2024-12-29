@@ -4,6 +4,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 
 import { useBlockScroll, useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
+import { menuVariants } from '@/lib/motion';
 import { actions, CodeSet, store } from '@/store';
 
 import { Input } from '../input';
@@ -84,26 +85,7 @@ export const Dropdown = (props: {
       className="z-pop bg-default-300/20 no-scrollbar absolute left-0 top-full flex max-h-[416px] w-full translate-y-0.5 flex-col overflow-scroll rounded-lg p-2 text-white backdrop-blur-lg"
       initial={false}
       animate={visible ? 'open' : 'closed'}
-      variants={{
-        open: {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          transition: {
-            type: 'spring',
-            bounce: 0.2,
-            duration: 0.5,
-            delayChildren: 0.2,
-            staggerChildren: 0.05,
-          },
-        },
-        closed: {
-          clipPath: 'inset(10% 50% 90% 50%)',
-          transition: {
-            type: 'spring',
-            bounce: 0,
-            duration: 0.3,
-          },
-        },
-      }}
+      variants={menuVariants}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
     >
       {hasItem ? (

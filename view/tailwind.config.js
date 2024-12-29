@@ -44,6 +44,11 @@ export default {
               800: '#460530',
               900: '#1d0014',
             },
+            dark: {
+              foreground: '#fff',
+              DEFAULT: '#1a1a1a',
+              deeper: '#111',
+            },
           },
         },
       },
