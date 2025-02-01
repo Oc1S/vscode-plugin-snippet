@@ -1,1 +1,3 @@
-export * from './env'
+export const noop = () => {};
+
+export * from './env';

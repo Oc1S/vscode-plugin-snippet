@@ -5,22 +5,9 @@ import { isBrowser } from '@/constants';
 
 import { demoCode } from '../demo';
 
-export type IFile = {
-  id: string;
-  name: string;
-  code: string;
-};
-
-export type ICodeSet = {
-  id: string;
-  name: string;
-  tags: string[];
-  files: IFile[];
-};
-
 const generateFile = (data?: Partial<IFile>) => ({
   id: nanoid(),
-  name: `new-${Date.now()}.tsx`,
+  name: `new-${Date.now()}`,
   code: '',
   ...data,
 });

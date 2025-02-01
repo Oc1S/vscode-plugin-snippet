@@ -7,6 +7,7 @@ export type Events = {
   dropdown: boolean;
   drawer: DrawerState;
   'context-menu': ContextMenuState;
+  'delete-file-comfirm': Fn;
 };
 
 export const emitter = mitt<Events>();
