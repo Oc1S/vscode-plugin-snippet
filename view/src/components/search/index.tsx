@@ -42,7 +42,7 @@ export const Search = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     /* line */
-    <div className="flex items-center">
+    <div className="mb-12 flex items-center">
       {/* relative container */}
       <div className="relative" ref={containerRef}>
         <Input

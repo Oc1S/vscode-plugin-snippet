@@ -24,7 +24,7 @@ export const Route = createRootRoute({
       </>
       <Noise />
       <Suspense>
-        <TanStackRouterDevtools />
+        <TanStackRouterDevtools position="bottom-right" />
       </Suspense>
     </>
   ),

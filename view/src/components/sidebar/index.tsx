@@ -10,9 +10,9 @@ export const Sidebar = () => {
   const codeSets = useStore().snippet.codeSets();
 
   return (
-    <div className="flex h-screen min-w-[200px] flex-col items-center gap-2 py-20">
+    <div className="flex h-screen min-w-[200px] flex-col items-center gap-2 pb-4 pt-12">
       <motion.div
-        className="text-xl text-[#e0e055]"
+        className="mb-2 text-xl text-[#e0e055]"
         whileHover={{
           scale: 1.2,
         }}

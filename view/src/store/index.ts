@@ -23,7 +23,7 @@ const generateCodeSet = (data?: Partial<ICodeSet>) => {
 };
 
 /* TODO:for test */
-const testCodeSets = Array.from({ length: 20 }, (_, index) => {
+const testCodeSets = Array.from({ length: 200 }, (_, index) => {
   return generateCodeSet({
     name: `test_set_${index}`,
     tags: ['test', 'for', 'fun'],
@@ -84,9 +84,6 @@ const snippetStore = createStore('code')(
         const isRemovingCurrentSet =
           draft.codeSetIndex === draft.codeSets.findIndex(s => s.id === id);
         draft.codeSets = draft.codeSets.filter(s => s.id !== id);
-
-        console.log(isRemovingCurrentSet, id, draft.codeSets);
-
         if (isRemovingCurrentSet) {
           draft.fileIndex = 0;
           const remainCount = draft.codeSets.length;

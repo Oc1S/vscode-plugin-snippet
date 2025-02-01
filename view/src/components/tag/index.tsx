@@ -15,7 +15,7 @@ export const Tag = ({ value }: { value: string }) => {
       color="primary"
       variant="flat"
       className="cursor-pointer hover:opacity-90"
-      onDoubleClick={openFormDrawer}
+      onClick={openFormDrawer}
       onContextMenu={openFormDrawer}
     >
       {value}
