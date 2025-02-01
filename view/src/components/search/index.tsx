@@ -5,8 +5,9 @@ import { useOnClickOutside } from 'usehooks-ts';
 import { useBlockScroll, useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
 import { menuVariants } from '@/lib/motion';
-import { actions, ICodeSet, store } from '@/store';
+import { actions, store } from '@/store';
 
+import { Empty } from '../empty';
 import { Input } from '../input';
 
 const itemVariants: Variants = {
@@ -42,7 +43,7 @@ export const Search = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     /* line */
-    <div className="mb-12 flex items-center">
+    <div className="-mt-20 mb-8 flex items-center">
       {/* relative container */}
       <div className="relative" ref={containerRef}>
         <Input
@@ -58,10 +59,7 @@ export const Search = () => {
           }}
         />
         <Dropdown
-          list={searchResult.map(result => ({
-            id: result.id,
-            label: result.name,
-          }))}
+          list={searchResult}
           outsideElement={containerRef}
           onSelect={reset}
         />
@@ -70,16 +68,14 @@ export const Search = () => {
   );
 };
 
-type Item = { label: string; id: string };
-
 export const Dropdown = (props: {
-  list: Item[];
+  list: ICodeSet[];
   outsideElement: RefObject<HTMLElement>;
-  onSelect?: (item: Item, index: number) => void;
+  onSelect?: (item: ICodeSet, index: number) => void;
 }) => {
   const { list, outsideElement, onSelect } = props;
   const [isOpen, setIsOpen] = useState(false);
-  // const ref = useRef<HTMLUListElement>(null);
+
   useOnClickOutside(outsideElement, () => {
     setIsOpen(false);
   });
@@ -87,7 +83,7 @@ export const Dropdown = (props: {
   useEventListener('dropdown', setIsOpen);
   useBlockScroll(isOpen);
 
-  const handleSelect = (item: Item, index: number) => {
+  const handleSelect = (item: ICodeSet, index: number) => {
     actions.snippet.changeCodeSetById(item.id);
     setIsOpen(false);
     onSelect?.(item, index);
@@ -105,25 +101,27 @@ export const Dropdown = (props: {
     >
       {hasItem ? (
         <ul>
-          {list.map((item, i) => (
-            <motion.li key={i} variants={itemVariants} className="w-full">
-              <div
-                tabIndex={0}
-                className="focus:bg-primary/25 hover:bg-primary/15 hover:text-primary-50 h-10 w-full cursor-pointer rounded-md p-2 outline-none transition"
-                onClick={() => handleSelect(item, i)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    handleSelect(item, i);
-                  }
-                }}
-              >
-                Item {i}
-              </div>
-            </motion.li>
-          ))}
+          {list.map((item, i) => {
+            return (
+              <motion.li key={i} variants={itemVariants} className="w-full">
+                <div
+                  tabIndex={0}
+                  className="focus:bg-primary/25 hover:bg-primary/15 hover:text-primary-50 h-10 w-full cursor-pointer rounded-md p-2 outline-none transition"
+                  onClick={() => handleSelect(item, i)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      handleSelect(item, i);
+                    }
+                  }}
+                >
+                  {item.name}
+                </div>
+              </motion.li>
+            );
+          })}
         </ul>
       ) : (
-        <li className="flex items-center justify-center">None</li>
+        <Empty />
       )}
     </motion.div>
   );
