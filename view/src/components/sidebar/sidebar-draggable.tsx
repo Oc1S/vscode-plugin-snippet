@@ -33,7 +33,7 @@ export const Sidebar = () => {
                   'my-0.5 flex cursor-pointer items-center justify-center rounded-md p-4 py-1 text-[#eee] transition hover:bg-white/10 hover:opacity-90',
                   isCurrent && '!bg-primary/20 text-primary-400/70'
                 )}
-                onClick={() => actions.snippet.changeCodeSet(index)}
+                onClick={() => actions.snippet.changeSelectedCodeSet(index)}
               >
                 {s.name}
               </motion.div>

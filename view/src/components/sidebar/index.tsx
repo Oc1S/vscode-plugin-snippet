@@ -10,7 +10,7 @@ export const Sidebar = () => {
   const codeSets = useStore().snippet.codeSets();
 
   return (
-    <div className="flex min-w-[200px] flex-col items-center justify-center gap-2">
+    <div className="flex h-screen min-w-[200px] flex-col items-center gap-2 py-20">
       <motion.div
         className="text-xl text-[#e0e055]"
         whileHover={{
@@ -31,7 +31,7 @@ export const Sidebar = () => {
           selectedKey={useStore().snippet.currentSet().id}
           onSelectionChange={id => {
             const index = codeSets.findIndex(s => s.id === id);
-            actions.snippet.changeCodeSet(index);
+            actions.snippet.changeSelectedCodeSet(index);
           }}
         >
           {codeSets.map((s, index) => {
@@ -42,12 +42,15 @@ export const Sidebar = () => {
                 className={cx(
                   'flex min-w-32 max-w-[180px] cursor-pointer items-center justify-center rounded px-4 text-[#eee] transition hover:bg-white/10 hover:opacity-90'
                 )}
-                onClick={() => actions.snippet.changeCodeSet(index)}
+                onClick={() => actions.snippet.changeSelectedCodeSet(index)}
                 onContextMenu={e => {
                   e.preventDefault();
                   snippetMenu({
-                    left: e.clientX,
-                    top: e.clientY,
+                    snippet: s,
+                    style: {
+                      left: e.clientX,
+                      top: e.clientY,
+                    },
                   });
                 }}
               />

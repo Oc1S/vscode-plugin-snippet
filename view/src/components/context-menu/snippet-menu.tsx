@@ -1,17 +1,23 @@
 import { ListboxItemProps } from '@nextui-org/react';
 
+import { actions } from '@/store';
 import { cx } from '@/utils';
 
+import { drawer } from '../drawer';
+import { CodeSetForm } from '../form/code-set-form';
 import { contextMenu } from '.';
 import { AddNoteIcon, DeleteDocumentIcon, EditDocumentIcon } from './icons';
 
 const iconClasses =
   'text-xl text-default-500 pointer-events-none flex-shrink-0';
 
-export const snippetMenu = (style: React.CSSProperties) => {
+export const snippetMenu = (config: {
+  snippet: ICodeSet;
+  style: React.CSSProperties;
+}) => {
   contextMenu({
-    style,
-    list: [
+    style: config.style,
+    options: [
       {
         id: 'new',
         children: 'New Snippet',
@@ -33,5 +39,22 @@ export const snippetMenu = (style: React.CSSProperties) => {
         ),
       },
     ] satisfies ListboxItemProps[],
+    onSelect(key: React.Key) {
+      switch (key) {
+        case 'new':
+          actions.snippet.addCodeSet();
+          break;
+        case 'edit':
+          drawer({
+            content: <CodeSetForm />,
+          });
+          break;
+        case 'delete':
+          actions.snippet.removeCodeSetById(config.snippet.id);
+          break;
+        default:
+          break;
+      }
+    },
   });
 };

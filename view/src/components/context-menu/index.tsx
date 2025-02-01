@@ -4,15 +4,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { useEventListener } from '@/hooks';
 import { trigger } from '@/lib/mitt';
-import { actions } from '@/store';
-
-import { drawer } from '../drawer';
-import { CodeSetForm } from '../form/code-set-form';
 
 export type ContextMenuState = {
   isOpen?: boolean;
-  list?: ListboxItemProps[];
   style?: React.CSSProperties;
+  options?: ListboxItemProps[];
+  onSelect?: (key: React.Key) => void;
 };
 
 const menuVariant = {
@@ -42,7 +39,7 @@ const menuVariant = {
 const key = 'context-menu';
 
 const contextMenuFunc = (
-  data: ContextMenuState & Required<Pick<ContextMenuState, 'list' | 'style'>>
+  data: ContextMenuState & Required<Omit<ContextMenuState, 'isOpen'>>
 ) => {
   trigger(key, { isOpen: true, ...data });
 };
@@ -59,10 +56,11 @@ export const ContextMenu = () => {
   >({
     isOpen: false,
     style: {},
-    list: [],
+    options: [],
+    onSelect: () => {},
   });
 
-  const { isOpen, style, list } = contextMenuState;
+  const { isOpen, style, options, onSelect } = contextMenuState;
 
   useEventListener(key, (data: ContextMenuState) => {
     setContextMenuState(prev => ({ ...prev, ...data }));
@@ -78,22 +76,6 @@ export const ContextMenu = () => {
 
   const position = `${style.top ?? ''}_${style.right ?? ''}_${style.bottom ?? ''}_${style.left ?? ''}`;
 
-  const onSelect = (key: React.Key) => {
-    console.log('action', key);
-    switch (key) {
-      case 'new':
-        actions.snippet.addCodeSet();
-        break;
-      case 'edit':
-        drawer({
-          content: <CodeSetForm />,
-        });
-        break;
-      case 'delete':
-      default:
-        break;
-    }
-  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -105,9 +87,9 @@ export const ContextMenu = () => {
             <Listbox
               aria-label="context-menu"
               variant="flat"
-              onAction={onSelect}
+              onAction={key => onSelect(key)}
             >
-              {list.map(item => {
+              {options.map(item => {
                 const { id, ...rest } = item;
                 return <ListboxItem key={id} {...rest} />;
               })}

@@ -57,7 +57,7 @@ const snippetStore = createStore('code')(
   }))
   .extendActions((set, get) => ({
     /* code set -- start */
-    changeCodeSet: (index: number) => {
+    changeSelectedCodeSet: (index: number) => {
       if (get.codeSetIndex() === index) {
         return;
       }
@@ -77,6 +77,29 @@ const snippetStore = createStore('code')(
         draft.codeSets.push(generateCodeSet());
         draft.codeSetIndex = draft.codeSets.length - 1;
         draft.fileIndex = 0;
+      });
+    },
+    removeCodeSetById(id: string) {
+      set.state(draft => {
+        const isRemovingCurrentSet =
+          draft.codeSetIndex === draft.codeSets.findIndex(s => s.id === id);
+        draft.codeSets = draft.codeSets.filter(s => s.id !== id);
+
+        console.log(isRemovingCurrentSet, id, draft.codeSets);
+
+        if (isRemovingCurrentSet) {
+          draft.fileIndex = 0;
+          const remainCount = draft.codeSets.length;
+          if (remainCount <= draft.codeSetIndex) {
+            draft.codeSetIndex = remainCount - 1;
+          }
+        } else {
+          /* not removing current code set, so we need to update set index */
+          const currentSetId = get.currentSet().id;
+          /* codeSets has been updated, find the new index */
+          const newIndex = draft.codeSets.findIndex(f => f.id === currentSetId);
+          draft.codeSetIndex = newIndex;
+        }
       });
     },
     /* code set -- end */
@@ -102,16 +125,20 @@ const snippetStore = createStore('code')(
       }
       set.state(draft => {
         const currentSet = draft.codeSets[draft.codeSetIndex];
-        const isClickCurrentFile =
+        const isRemoveCurrentFile =
           draft.fileIndex === currentSet.files.findIndex(f => f.id === id);
+        /* remove action */
         currentSet.files = currentSet.files.filter(f => f.id !== id);
-        if (isClickCurrentFile) {
+        if (isRemoveCurrentFile) {
+          /* removing current file, if fileIndex is greater than left count, we need to update fileIndex to (leftCount - 1) */
           const leftCount = currentSet.files.length;
           if (leftCount <= draft.fileIndex) {
             draft.fileIndex = leftCount - 1;
           }
         } else {
+          /* not removing current file, so we need to update fileIndex */
           const currentFileId = get.currentFileId();
+          /* currentSet.files has been updated, find the new index */
           const newIndex = currentSet.files.findIndex(
             f => f.id === currentFileId
           );
@@ -122,13 +149,13 @@ const snippetStore = createStore('code')(
     /* file -- end */
   }))
   .extendActions((set, get) => ({
-    // based on **changeCodeSet**
+    // based on **changeSelectedCodeSet**
     changeCodeSetById: (codeSetId: string) => {
       if (get.currentSet().id === codeSetId) {
         return;
       }
       const targetIndex = get.codeSets().findIndex(s => s.id === codeSetId);
-      set.changeCodeSet(targetIndex);
+      set.changeSelectedCodeSet(targetIndex);
     },
   }));
 
