@@ -19,7 +19,7 @@ export const Sidebar = () => {
     }
     document
       .getElementById(idBuilder(setId))
-      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [setId]);
 
   return (

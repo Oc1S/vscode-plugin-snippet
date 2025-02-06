@@ -27,8 +27,9 @@ export const Search = () => {
     const codeSets = store.snippet.codeSets();
     const result = codeSets.filter(s => {
       let flag = false;
-      s.name.includes(val) && (flag = true);
-      s.tags.forEach(t => t.includes(val) && (flag = true));
+      const target = val.toLowerCase();
+      s.name.toLowerCase().includes(target) && (flag = true);
+      s.tags.forEach(t => t.toLowerCase().includes(target) && (flag = true));
       return flag;
     });
     setSearchResult(result);
