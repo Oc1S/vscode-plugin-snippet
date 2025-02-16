@@ -16,13 +16,13 @@
     "preinstall": "npx only-allow pnpm",
     "postinstall": "stale-dep -u",
     "prepare": "simple-git-hooks",
-    "clean": "npx rimraf -rf ./out",
+    "clean": "npx rimraf -rf ./dist",
     "esbuild:base": "stale-dep && tsx scripts/esbuild.ts",
     "esbuild:watch": "pnpm esbuild:base --sourcemap --watch",
     "esbuild:analyze": "pnpm esbuild:base --minify --metafile --analyze && esbuild-visualizer --metadata ./meta.json --open",
     "compile:test": "pnpm clean && tsc -b ./test/tsconfig.json",
     "lint": "eslint src --ext ts",
-    "test": "stale-dep && pnpm compile:test && node ./out/test/runTests.js",
+    "test": "stale-dep && pnpm compile:test && node ./dist/test/runTests.js",
     "package": "vsce package --no-dependencies",
     "release": "npx @yutengjing/release",
     "publish:vs-marketplace": "vsce publish --no-dependencies",
@@ -44,6 +44,7 @@
     "@vscode/vsce": "^3.0.0",
     "@yutengjing/release": "^0.3.1",
     "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
     "esbuild": "~0.23.1",
     "esbuild-visualizer": "^0.6.0",
     "eslint": "^8.57.0",
@@ -89,7 +90,7 @@
   "categories": [
     "Other"
   ],
-  "main": "./out/src/extension.js",
+  "main": "./dist/src/extension.js",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.90.0"

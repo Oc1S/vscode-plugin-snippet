@@ -14,7 +14,8 @@ export default defineConfig({
   },
   build: {
     cssCodeSplit: false,
-    outDir: '../out/view',
+    outDir: '../dist/view',
     emptyOutDir: true,
+    chunkSizeWarningLimit: 2048 * 1024,
   },
 });

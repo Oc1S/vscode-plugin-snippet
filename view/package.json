@@ -7,7 +7,7 @@
     "dev": "vite",
     "start": "vite",
     "build": "tsc -b && vite build",
-    "watch": "vite build --watch",
+    "watch": "cross-env NODE_ENV=development vite build --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },

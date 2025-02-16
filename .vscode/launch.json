@@ -14,11 +14,11 @@
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "${workspaceFolder}/test-workspace"
             ],
-            "outFiles": ["${workspaceFolder}/out/**/*.js"],
+            "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
-                "**/resources/app/out/vs/**",
+                "**/resources/app/dist/vs/**",
                 "**/.vscode-insiders/extensions/",
                 "**/.vscode/extensions/"
             ],
@@ -32,18 +32,18 @@
             "name": "Test",
             "type": "extensionHost",
             "request": "launch",
-            "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+            "outFiles": ["${workspaceFolder}/dist/test/**/*.js"],
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
-                "**/resources/app/out/vs/**",
+                "**/resources/app/dist/vs/**",
                 "**/.vscode-insiders/extensions/",
                 "**/.vscode/extensions/"
             ],
             "sourceMaps": true,
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test/"
+                "--extensionTestsPath=${workspaceFolder}/dist/test/"
             ],
             "env": {
                 "VSCODE_DEBUG_MODE": "true"

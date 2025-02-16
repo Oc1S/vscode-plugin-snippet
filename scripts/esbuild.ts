@@ -1,19 +1,19 @@
 #!/usr/bin/env tsx
 
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-import type { BuildContext, BuildOptions } from 'esbuild'
-import esbuild from 'esbuild'
+import type { BuildContext, BuildOptions } from 'esbuild';
+import esbuild from 'esbuild';
 
-const isWatchMode = process.argv.includes('--watch')
+const isWatchMode = process.argv.includes('--watch');
 const options: BuildOptions = {
   color: true,
   logLevel: 'info',
   entryPoints: ['src/extension.ts'],
   bundle: true,
   metafile: process.argv.includes('--metafile'),
-  outdir: './out/src',
+  outdir: './dist/src',
   external: ['vscode', 'typescript'],
   format: 'cjs',
   platform: 'node',
@@ -30,14 +30,14 @@ const options: BuildOptions = {
           args => {
             const pathUmdMay = require.resolve(args.path, {
               paths: [args.resolveDir],
-            })
+            });
             // Call twice the replace is to solve the problem of the path in Windows
             const pathEsm = pathUmdMay
               .replace('/umd/', '/esm/')
-              .replace('\\umd\\', '\\esm\\')
-            return { path: pathEsm }
+              .replace('\\umd\\', '\\esm\\');
+            return { path: pathEsm };
           }
-        )
+        );
       },
     },
     {
@@ -48,34 +48,34 @@ const options: BuildOptions = {
             return fs.writeFile(
               path.resolve(__dirname, '../meta.json'),
               JSON.stringify(result.metafile)
-            )
+            );
           }
-        })
+        });
       },
     },
   ],
-}
+};
 
 async function main() {
-  let ctx: BuildContext | undefined
+  let ctx: BuildContext | undefined;
   try {
     if (isWatchMode) {
-      ctx = await esbuild.context(options)
-      await ctx.watch()
+      ctx = await esbuild.context(options);
+      await ctx.watch();
     } else {
-      const result = await esbuild.build(options)
+      const result = await esbuild.build(options);
       if (process.argv.includes('--analyze')) {
         const chunksTree = await esbuild.analyzeMetafile(result.metafile!, {
           color: true,
-        })
-        console.log(chunksTree)
+        });
+        console.log(chunksTree);
       }
     }
   } catch (error) {
-    console.error(error)
-    ctx?.dispose()
-    process.exit(1)
+    console.error(error);
+    ctx?.dispose();
+    process.exit(1);
   }
 }
 
-main()
+main();

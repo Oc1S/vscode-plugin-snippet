@@ -27,7 +27,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
 
-    "outDir": "./out/src"
+    "outDir": "./dist/src"
   },
   "include": ["src/**/*.ts", "hot-reload/**/*.ts"]
 }
